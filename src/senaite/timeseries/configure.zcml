@@ -19,7 +19,7 @@
 
   <genericsetup:registerProfile
       name="default"
-      title="senaite.timeseries"
+      title="SENAITE TIMESERIES"
       directory="profiles/default"
       description="Installs the senaite.timeseries add-on."
       provides="Products.GenericSetup.interfaces.EXTENSION"
