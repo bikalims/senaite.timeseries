@@ -1,0 +1,5 @@
+==================
+senaite.timeseries
+==================
+
+User documentation
