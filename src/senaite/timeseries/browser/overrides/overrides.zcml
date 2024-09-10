@@ -1,0 +1,33 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+       xmlns:zcml="http://namespaces.zope.org/browser"
+       xmlns:fss="http://namespaces.zope.org/browser"
+       xmlns:plone="http://namespaces.plone.org/plone"
+       xmlns:browser="http://namespaces.zope.org/browser"
+       xmlns:five="http://namespaces.zope.org/five"
+       i18n_domain="senaite.timeseries">
+
+      <!-- Edit Form: Analysis Service -->
+      <adapter
+          for="bika.lims.interfaces.IAnalysisService
+               zope.publisher.interfaces.browser.IBrowserRequest"
+          factory=".adapters.EditForm"/>
+
+      <!-- Table Lab Analyses -->
+      <browser:page
+          for="bika.lims.interfaces.IAnalysisRequest"
+          name="table_lab_analyses"
+          class=".analysisrequest.LabAnalysesTable"
+          permission="senaite.core.permissions.ManageAnalysisRequests"
+          layer="senaite.timeseries.interfaces.ISenaiteTimeseriesLayer"
+          />
+
+      <!-- Table Field Analyses -->
+      <browser:page
+          for="bika.lims.interfaces.IAnalysisRequest"
+          name="table_field_analyses"
+          class=".analysisrequest.FieldAnalysesTable"
+          permission="senaite.core.permissions.ManageAnalysisRequests"
+          layer="senaite.timeseries.interfaces.ISenaiteTimeseriesLayer"
+          />
+
+</configure>

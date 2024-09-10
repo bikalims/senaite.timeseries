@@ -4,13 +4,17 @@ from Products.Archetypes.Widget import StringWidget
 from Products.Archetypes.utils import DisplayList
 from archetypes.schemaextender.interfaces import IBrowserLayerAwareExtender
 from archetypes.schemaextender.interfaces import ISchemaExtender
+from archetypes.schemaextender.interfaces import ISchemaModifier
 from zope.component import adapts
 from zope.interface import implementer
+from zope.interface import implements
 
 from .fields import ExtStringField, ExtRecordsField
 from bika.lims.browser.widgets.recordswidget import RecordsWidget
 from bika.lims.interfaces import IBaseAnalysis
 from senaite.timeseries.config import _
+from senaite.timeseries.config import is_installed
+from senaite.timeseries.vocabularies import RESULT_TYPES
 from senaite.timeseries.interfaces import ISenaiteTimeseriesLayer
 
 
@@ -104,3 +108,20 @@ class BaseAnalysisSchemaExtender(object):
 
     def getFields(self):
         return self.fields
+
+
+class BaseAnalysisSchemaModifier(object):
+    adapts(IBaseAnalysis)
+    implements(ISchemaModifier)
+    layer = ISenaiteTimeseriesLayer
+
+    def __init__(self, context):
+        self.context = context
+
+    def fiddle(self, schema):
+        """
+        """
+        if is_installed():
+            schema["ResultType"].vocabulary = DisplayList(RESULT_TYPES)
+
+        return schema

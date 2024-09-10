@@ -5,6 +5,9 @@
     <include package="archetypes.schemaextender"/>
     <adapter name='senaite.timeseries.baseabstractanalysis'
              provides="archetypes.schemaextender.interfaces.ISchemaExtender"
-             factory=".baseabstractanalysis.BaseAnalysisSchemaExtender"/>
+             factory=".abstractbaseanalysis.BaseAnalysisSchemaExtender"/>
+    <adapter name='senaite.timeseries.baseabstractanalysis.schemamodifier'
+             provides="archetypes.schemaextender.interfaces.ISchemaModifier"
+             factory=".abstractbaseanalysis.BaseAnalysisSchemaModifier" />
 
 </configure>
