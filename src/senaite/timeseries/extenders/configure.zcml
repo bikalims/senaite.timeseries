@@ -1,10 +1,10 @@
 <configure xmlns:browser="http://namespaces.zope.org/browser"
            xmlns="http://namespaces.zope.org/zope"
-           i18n_domain="bika.aquaculture">
+           i18n_domain="senaite.timeseries">
 
     <include package="archetypes.schemaextender"/>
-    <adapter name='bika.aquaculture.analysisrequest'
+    <adapter name='senaite.timeseries.baseabstractanalysis'
              provides="archetypes.schemaextender.interfaces.ISchemaExtender"
-             factory=".analysisrequest.AnalysisRequestSchemaExtender"/>
+             factory=".baseabstractanalysis.BaseAnalysisSchemaExtender"/>
 
 </configure>

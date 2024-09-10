@@ -85,7 +85,7 @@ time_series_columns_field = ExtRecordsField(
 
 
 @implementer(ISchemaExtender, IBrowserLayerAwareExtender)
-class AnalysisRequestSchemaExtender(object):
+class BaseAnalysisSchemaExtender(object):
     adapts(IBaseAnalysis)
     layer = ISenaiteTimeseriesLayer
 
