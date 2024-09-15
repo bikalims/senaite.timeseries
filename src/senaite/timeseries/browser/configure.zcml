@@ -17,5 +17,30 @@
       type="plone"
       directory="static"
       />
+  <!-- Static Resources Viewlet -->
+  <browser:viewlet
+    name="senaite.ast.static"
+    manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
+    class="senaite.core.browser.viewlets.resources.ResourcesViewlet"
+    permission="zope2.View"
+    template="./static/resources.pt"
+    layer="senaite.timeseries.interfaces.ISenaiteTimeseriesLayer" />
+
+  <!-- Section for AST Analyses in Sample View-->
+  <browser:viewlet
+    for="bika.lims.interfaces.IAnalysisRequest"
+    name="senaite.core.section.timeseries_analyses"
+    manager="senaite.core.browser.viewlets.interfaces.ISampleSection"
+    class=".results.ASTAnalysesViewlet"
+    layer="senaite.core.interfaces.ISenaiteCore"
+    permission="zope2.View" />
+
+  <!-- AST results entry in Sample view -->
+  <browser:page
+    for="bika.lims.interfaces.IAnalysisRequest"
+    name="table_timeseries_analyses"
+    class=".results.ManageResultsView"
+    permission="senaite.core.permissions.ManageAnalysisRequests"
+    layer="senaite.timeseries.interfaces.ISenaiteTimeseriesLayer" />
 
 </configure>

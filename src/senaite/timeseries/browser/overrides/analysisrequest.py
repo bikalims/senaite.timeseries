@@ -80,10 +80,10 @@ class AnalysesView(AV):
                     "notation, e.g. 0.00005 or 1e-5, 10000 or 1e5")
 
             if result_type == "timeseries":
-                item["time_series_columns"] = [o['ColumnTitle'] for o in obj.getTimeSeriesColumns()]
-                item["time_series_graph_title"] = obj.getGraphTitle()
-                item["time_series_graph_xaxis"] = obj.getGraphXAxisTitle()
-                item["time_series_graph_yaxis"] = obj.getGraphYAxisTitle()
+                item["time_series_columns"] = [o['ColumnTitle'] for o in obj.TimeSeriesColumns]
+                item["time_series_graph_title"] = obj.GraphTitle
+                item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
+                item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
 
         if not result:
             return
