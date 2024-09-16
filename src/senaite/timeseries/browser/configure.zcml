@@ -31,7 +31,7 @@
     for="bika.lims.interfaces.IAnalysisRequest"
     name="senaite.core.section.timeseries_analyses"
     manager="senaite.core.browser.viewlets.interfaces.ISampleSection"
-    class=".results.ASTAnalysesViewlet"
+    class=".results.TimeSeriesAnalysesViewlet"
     layer="senaite.core.interfaces.ISenaiteCore"
     permission="zope2.View" />
 

@@ -19,23 +19,17 @@
 # Some rights reserved, see README and LICENSE.
 
 from bika.lims import api
-from bika.lims.utils import get_image
 from plone.memoize import view
 from senaite.timeseries.config import is_installed
 from senaite.timeseries.config import _
 from senaite.timeseries.browser.overrides.analysisrequest import AnalysesView
 from senaite.core.api import dtime
 from senaite.core.permissions import ViewResults
-# from senaite.ast import utils
-# from senaite.ast.config import AST_POINT_OF_CAPTURE
-# from senaite.ast.config import IDENTIFICATION_KEY
-# from senaite.ast.utils import get_ast_analyses
-# from senaite.ast.i18n import translate as t
 from senaite.core.browser.viewlets.sampleanalyses import LabAnalysesViewlet
 
 
-class ASTAnalysesViewlet(LabAnalysesViewlet):
-    """AST Analyses section viewlet for Sample view
+class TimeSeriesAnalysesViewlet(LabAnalysesViewlet):
+    """TimeSeries Analyses section viewlet for Sample view
     """
     title = _("Timeseries Results")
     icon_name = "client"
@@ -46,18 +40,12 @@ class ASTAnalysesViewlet(LabAnalysesViewlet):
         at least one sensitivity testing analysis or the microorganism
         identification analysis is present
         """
-        return True
         if not is_installed():
             return False
 
-        # does this sample has the identification analysis?
-        analyses = self.context.getAnalyses(getKeyword=IDENTIFICATION_KEY)
-        if analyses:
-            return True
-
-        # does this have sensitivity testing analyses?
-        ast_analyses = get_ast_analyses(self.context)
-        if ast_analyses:
+        # does this have timeseries analyses?
+        timeseries_analyses = get_timeseries_analyses(self.context)
+        if timeseries_analyses:
             return True
 
         return False
@@ -90,3 +78,21 @@ class ManageResultsView(AnalysesView):
         all_columns = filter(lambda c: c not in hide, all_columns)
         for review_state in self.review_states:
             review_state.update({"columns": all_columns})
+
+
+def get_timeseries_analyses(sample, short_title=None, skip_invalid=True):
+    """Returns the ast analyses assigned to the sample passed in and for the
+    microorganism name specified, if any
+    """
+    analyses = sample.getAnalyses(getPointOfCapture="lab")
+    analyses = map(api.get_object, analyses)
+
+    if short_title:
+        # Filter by microorganism name (short title)
+        analyses = filter(lambda a: a.getShortTitle() == short_title, analyses)
+
+    # Skip invalid analyses
+    skip = skip_invalid and ["cancelled", "retracted", "rejected"] or []
+    analyses = filter(lambda a: api.get_review_status(a) not in skip, analyses)
+    analyses = filter(lambda a: a.TimeSeriesColumns, analyses)
+    return analyses
