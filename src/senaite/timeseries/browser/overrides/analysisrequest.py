@@ -92,6 +92,21 @@ class AnalysesView(AV):
             sciformat=int(self.scinot), decimalmark=self.dmk)
         item["formatted_result"] = formatted_result
 
+    def folderitems(self):
+        # This shouldn't be required here, but there are some views that calls
+        # directly contents_table() instead of __call__, so before_render is
+        # never called. :(
+        self.before_render()
+
+        # Get all items
+        # Note we call AnalysesView's base class!
+        items = super(AnalysesView, self).folderitems()
+        newitems = []
+        for item in items:
+            if not item.get("time_series_columns"):
+                newitems.append(item)
+        return newitems
+
 
 class FieldAnalysesTable(AnalysesView):
     def __init__(self, context, request):

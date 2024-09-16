@@ -19,12 +19,9 @@
 # Some rights reserved, see README and LICENSE.
 
 from bika.lims import api
-from plone.memoize import view
 from senaite.timeseries.config import is_installed
 from senaite.timeseries.config import _
 from senaite.timeseries.browser.overrides.analysisrequest import AnalysesView
-from senaite.core.api import dtime
-from senaite.core.permissions import ViewResults
 from senaite.core.browser.viewlets.sampleanalyses import LabAnalysesViewlet
 
 
@@ -78,6 +75,21 @@ class ManageResultsView(AnalysesView):
         all_columns = filter(lambda c: c not in hide, all_columns)
         for review_state in self.review_states:
             review_state.update({"columns": all_columns})
+
+    def folderitems(self):
+        # This shouldn't be required here, but there are some views that calls
+        # directly contents_table() instead of __call__, so before_render is
+        # never called. :(
+        self.before_render()
+
+        # Get all items
+        # Note we call AnalysesView's base class!
+        items = super(AnalysesView, self).folderitems()
+        newitems = []
+        for item in items:
+            if item.get("time_series_columns"):
+                newitems.append(item)
+        return newitems
 
 
 def get_timeseries_analyses(sample, short_title=None, skip_invalid=True):
