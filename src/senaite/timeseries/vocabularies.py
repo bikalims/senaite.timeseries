@@ -2,6 +2,7 @@
 
 from senaite.timeseries.config import _
 
+# get and append
 RESULT_TYPES = (
     ("numeric", _("Numeric")),
     ("string", _("String")),
