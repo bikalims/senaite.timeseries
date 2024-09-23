@@ -29,8 +29,7 @@ class AnalysesView(AV):
 
         result = obj.getResult()
         capture_date = obj.getResultCaptureDate()
-        localized_capture_date = dtime.to_localized_time(
-            capture_date, long_format=1)
+        localized_capture_date = dtime.to_localized_time(capture_date, long_format=1)
 
         item["Result"] = result
         item["ResultCaptureDate"] = dtime.to_iso_format(capture_date)
@@ -40,6 +39,8 @@ class AnalysesView(AV):
         unit = item.get("Unit")
         if unit:
             item["after"]["Result"] = self.render_unit(unit)
+
+        result_type = obj.getResultType()
 
         # Edit mode enabled of this Analysis
         if self.is_analysis_edition_allowed(analysis_brain):
@@ -64,7 +65,6 @@ class AnalysesView(AV):
                 item["Result"] = "{} {}".format(operand, result).strip()
 
             # Prepare result options
-            result_type = obj.getResultType()
             item["result_type"] = result_type
 
             choices = self.get_result_options(obj)
@@ -77,10 +77,23 @@ class AnalysesView(AV):
             if result_type == "numeric":
                 item["help"]["Result"] = _(
                     "Enter the result either in decimal or scientific "
-                    "notation, e.g. 0.00005 or 1e-5, 10000 or 1e5")
+                    "notation, e.g. 0.00005 or 1e-5, 10000 or 1e5"
+                )
 
             if result_type == "timeseries":
-                item["time_series_columns"] = [o['ColumnTitle'] for o in obj.TimeSeriesColumns]
+                item["time_series_columns"] = [
+                    o["ColumnTitle"] for o in obj.TimeSeriesColumns
+                ]
+                item["time_series_graph_title"] = obj.GraphTitle
+                item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
+                item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
+        else:
+            # Edit mode is NOT enabled of this Analysis
+            if result_type == "timeseries":
+                item["result_type"] = "timeseries_readonly"
+                item["time_series_columns"] = [
+                    o["ColumnTitle"] for o in obj.TimeSeriesColumns
+                ]
                 item["time_series_graph_title"] = obj.GraphTitle
                 item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
                 item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
@@ -89,7 +102,8 @@ class AnalysesView(AV):
             return
 
         formatted_result = obj.getFormattedResult(
-            sciformat=int(self.scinot), decimalmark=self.dmk)
+            sciformat=int(self.scinot), decimalmark=self.dmk
+        )
         item["formatted_result"] = formatted_result
 
     def folderitems(self):
@@ -112,10 +126,9 @@ class FieldAnalysesTable(AnalysesView):
     def __init__(self, context, request):
         super(FieldAnalysesTable, self).__init__(context, request)
 
-        self.contentFilter.update({
-            "getPointOfCapture": "field",
-            "getAncestorsUIDs": [api.get_uid(context)]
-        })
+        self.contentFilter.update(
+            {"getPointOfCapture": "field", "getAncestorsUIDs": [api.get_uid(context)]}
+        )
 
         self.form_id = "%s_field_analyses" % api.get_id(context)
         self.allow_edit = True
@@ -130,10 +143,9 @@ class LabAnalysesTable(AnalysesView):
     def __init__(self, context, request):
         super(LabAnalysesTable, self).__init__(context, request)
 
-        self.contentFilter.update({
-            "getPointOfCapture": "lab",
-            "getAncestorsUIDs": [api.get_uid(context)]
-        })
+        self.contentFilter.update(
+            {"getPointOfCapture": "lab", "getAncestorsUIDs": [api.get_uid(context)]}
+        )
 
         self.form_id = "%s_lab_analyses" % api.get_id(context)
         self.allow_edit = True
