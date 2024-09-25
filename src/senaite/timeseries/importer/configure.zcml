@@ -1,0 +1,11 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="senaite.timeseries">
+
+   <adapter
+    for="*"
+    name="timeseries_importer"
+    factory=".timeseries.timeseries_import"
+    provides="senaite.core.exportimport.instruments.IInstrumentImportInterface"/>
+
+</configure>
