@@ -19,7 +19,7 @@
       />
   <!-- Static Resources Viewlet -->
   <browser:viewlet
-    name="senaite.ast.static"
+    name="senaite.timeseries.static"
     manager="plone.app.layout.viewlets.interfaces.IHtmlHead"
     class="senaite.core.browser.viewlets.resources.ResourcesViewlet"
     permission="zope2.View"

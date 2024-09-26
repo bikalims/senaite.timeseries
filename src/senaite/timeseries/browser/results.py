@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 #
-# This file is part of SENAITE.AST.
+# This file is part of SENAITE.TIMESERIES.
 #
-# SENAITE.AST is free software: you can redistribute it and/or modify it under
+# SENAITE.TIMESERIES is free software: you can redistribute it and/or modify it under
 # the terms of the GNU General Public License as published by the Free
 # Software Foundation, version 2.
 #
@@ -19,6 +19,7 @@
 # Some rights reserved, see README and LICENSE.
 
 from bika.lims import api
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from senaite.timeseries.config import is_installed
 from senaite.timeseries.config import _
 from senaite.timeseries.browser.overrides.analysisrequest import AnalysesView
@@ -26,14 +27,14 @@ from senaite.core.browser.viewlets.sampleanalyses import LabAnalysesViewlet
 
 
 class TimeSeriesAnalysesViewlet(LabAnalysesViewlet):
-    """TimeSeries Analyses section viewlet for Sample view
-    """
+    """TimeSeries Analyses section viewlet for Sample view"""
+
     title = _("Timeseries Results")
     icon_name = "client"
     capture = "timeseries"
 
     def available(self):
-        """Returns true if senaite.ast is installed and the sample contains
+        """Returns true if senaite.timeseries is installed and the sample contains
         at least one sensitivity testing analysis or the microorganism
         identification analysis is present
         """
@@ -49,15 +50,16 @@ class TimeSeriesAnalysesViewlet(LabAnalysesViewlet):
 
 
 class ManageResultsView(AnalysesView):
-    """Listing view for AST results entry
-    """
+    """Listing view for Time Series results entry"""
+
+    contents_table_template = ViewPageTemplateFile("templates/timeseries_results.pt")
+
     def __init__(self, context, request):
         super(ManageResultsView, self).__init__(context, request)
 
-        self.contentFilter.update({
-            "getPointOfCapture": "lab",
-            "getAncestorsUIDs": [api.get_uid(context)]
-        })
+        self.contentFilter.update(
+            {"getPointOfCapture": "lab", "getAncestorsUIDs": [api.get_uid(context)]}
+        )
 
         self.form_id = "%s_lab_analyses" % api.get_id(context)
         self.allow_edit = True
@@ -67,9 +69,19 @@ class ManageResultsView(AnalysesView):
         self.expand_all_categories = False
         self.reorder_analysis_columns()
         # Remove the columns we are not interested in from review_states
-        hide = ["Method", "Instrument", "Analyst", "DetectionLimitOperand",
-                "Specification", "Uncertainty", "retested", "Attachments",
-                "DueDate", "Hidden", "Unit"]
+        hide = [
+            "Method",
+            "Instrument",
+            "Analyst",
+            "DetectionLimitOperand",
+            "Specification",
+            "Uncertainty",
+            "retested",
+            "Attachments",
+            "DueDate",
+            "Hidden",
+            "Unit",
+        ]
 
         all_columns = self.columns.keys()
         all_columns = filter(lambda c: c not in hide, all_columns)
@@ -93,7 +105,7 @@ class ManageResultsView(AnalysesView):
 
 
 def get_timeseries_analyses(sample, short_title=None, skip_invalid=True):
-    """Returns the ast analyses assigned to the sample passed in and for the
+    """Returns the timeseries analyses assigned to the sample passed in and for the
     microorganism name specified, if any
     """
     analyses = sample.getAnalyses(getPointOfCapture="lab")
