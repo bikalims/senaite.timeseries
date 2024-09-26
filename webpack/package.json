@@ -1,7 +1,7 @@
 {
-  "name": "senaite.ast",
+  "name": "senaite.timeseries",
   "version": "1.0.0",
-  "main": "app/senaite.ast.js",
+  "main": "app/senaite.timeseries.js",
   "scripts": {
     "build": "webpack -p",
     "watch": "webpack -d --watch",
