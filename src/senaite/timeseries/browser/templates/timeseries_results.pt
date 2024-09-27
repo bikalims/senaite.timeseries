@@ -5,62 +5,47 @@
   <!-- Load d3.js -->
   <script src="https://d3js.org/d3.v4.js"></script>
   <script>
-        // set the dimensions and margins of the graph
-        var margin = {top: 10, right: 30, bottom: 30, left: 60},
-            width = 460 - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
+  document.addEventListener("DOMContentLoaded", () => {
+    loadLineChart();
 
-        // append the svg object to the body of the page
-        var svg = d3.select("#my_dataviz")
-          .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-            .attr("transform",
-                  "translate(" + margin.left + "," + margin.top + ")");
+    function loadLineChart() {
+      const data = [
+        { x: 1, y: 2 },
+        { x: 2, y: 5 },
+        { x: 3, y: 3 },
+        { x: 4, y: 7 }
+      ];
 
-        //Read the data
-        d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv",
+      // Create SVG element
+      const svg = d3.select("#line-chart")
+        .append("svg")
+        .attr("width", 400)
+        .attr("height", 300)
+        .style("border", "1px solid black");
 
-          // When reading the csv, I must format variables:
-          function(d){
-            return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
-          },
+      // Scales for x and y axes
+      const xScale = d3.scaleLinear()
+        .domain([1, 4])
+        .range([50, 350]);
+      const yScale = d3.scaleLinear()
+        .domain([0, 8])
+        .range([250, 50]);
 
-          // Now I can use this dataset:
-          function(data) {
+      // Line generator
+      const line = d3.line()
+        .x(d => xScale(d.x))
+        .y(d => yScale(d.y));
 
-            // Add X axis --> it is a date format
-            var x = d3.scaleTime()
-              .domain(d3.extent(data, function(d) { return d.date; }))
-              .range([ 0, width ]);
-            svg.append("g")
-              .attr("transform", "translate(0," + height + ")")
-              .call(d3.axisBottom(x));
+      // Append line path to SVG
+      svg.append("path")
+        .datum(data)
+        .attr("d", line)
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 2)
+        .attr("fill", "none");
 
-            // Add Y axis
-            var y = d3.scaleLinear()
-              .domain([0, d3.max(data, function(d) { return +d.value; })])
-              .range([ height, 0 ]);
-            svg.append("g")
-              .call(d3.axisLeft(y));
-
-            // Add the line
-            svg.append("path")
-              .datum(data)
-              .attr("fill", "none")
-              .attr("stroke", "steelblue")
-              .attr("stroke-width", 1.5)
-              .attr("d", d3.line()
-                .x(function(d) { return x(d.date) })
-                .y(function(d) { return y(d.value) })
-                )
-
-        debugger;
-        }
-        )
-
-
+    }
+  })
   </script>
 
   <!-- Results entry listing -->
@@ -92,8 +77,6 @@
   </form>
 
   <!-- Create a div where the graph will take place -->
-  <p>WTF</p>
-  <div id="my_dataviz"></div>
-  <p>WTF</p>
+  <div id="line-chart"></div>
 
 </tal:contents_table>
