@@ -34,7 +34,7 @@ module.exports = {
   entry: {
     "senaite.timeseries": [
       "./senaite.timeseries.js",
-      "./scss/senaite.timeseries.scss"
+      // "./scss/senaite.timeseries.scss"
     ],
   },
   output: {
@@ -170,5 +170,26 @@ module.exports = {
     jquery: "jQuery",
     bootstrap: "bootstrap",
     tinyMCE: "tinymce"
-  }
+  },
+resolve: {
+  alias: {
+    'app/components/TableCell': path.resolve(__dirname, 'app/components/TableCell.coffee'),
+    'app/components/Checkbox': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/Checkbox.coffee'),
+    'app/components/HiddenField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/HiddenField.coffee'),
+    'app/components/MultiChoice': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/MultiChoice.coffee'),
+    'app/components/MultiSelect': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/MultiSelect.coffee'),
+    'app/components/MultiValue': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/MultiValue.coffee'),
+    'app/components/NumericField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/NumericField.coffee'),
+    'app/components/CalculatedField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/CalculatedField.coffee'),
+    'app/components/ReadonlyField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/ReadonlyField.coffee'),
+    'app/components/Select': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/Select.coffee'),
+    'app/components/StringField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/StringField.coffee'),
+    'app/components/TextField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/TextField.coffee'),
+    'app/components/FractionField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/FractionField.coffee'),
+    'app/components/DateTime': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/DateTime.coffee'),
+    // Add more aliases as needed for other dependencies
+  },
+  extensions: ['.js', '.jsx', '.coffee'],
+}
+
 };

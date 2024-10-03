@@ -12,8 +12,9 @@
       />
 
   <!-- Publish static files -->
+  <include package="plone.resource"/>
   <plone:static
-      name="senaite.timeseries"
+      name="senaite.timeseries.static"
       type="plone"
       directory="static"
       />
