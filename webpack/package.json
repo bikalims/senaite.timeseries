@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "app/senaite.timeseries.js",
   "scripts": {
-    "build": "webpack -p",
-    "watch": "webpack -d --watch",
+    "build": "mode=development webpack",
+    "watch": "mode=development webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "babel": {
@@ -16,9 +16,8 @@
       "@babel/plugin-proposal-class-properties"
     ]
   },
-  "author": "RIDING BYTES & NARALABS",
+  "author": "BikaLabs",
   "license": "GPL-2.0-only",
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/plugin-proposal-class-properties": "^7.12.1",

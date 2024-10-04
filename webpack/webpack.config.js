@@ -3,13 +3,13 @@ const webpack = require("webpack");
 const childProcess = require("child_process");
 
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-const CleanCSS = require("clean-css");
+// const CleanCSS = require("clean-css");
 const CopyPlugin = require("copy-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MergeIntoSingleFilePlugin = require("webpack-merge-and-include-globally");
+// const MergeIntoSingleFilePlugin = require("webpack-merge-and-include-globally");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
+// const TerserPlugin = require("terser-webpack-plugin");
 const uglifyJS = require("uglify-js");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
@@ -32,10 +32,7 @@ module.exports = {
   mode: mode,
   context: path.resolve(__dirname, "app"),
   entry: {
-    "senaite.timeseries": [
-      "./senaite.timeseries.js",
-      // "./scss/senaite.timeseries.scss"
-    ],
+    timeseries: "./senaite.timeseries.js",
   },
   output: {
     // filename: devMode ? "[name].js" : `[name]-${gitHash}.js`,
@@ -52,11 +49,13 @@ module.exports = {
         use: [
           {
             // https://webpack.js.org/loaders/babel-loader/
-            loader: "babel-loader"
+            loader: "babel-loader",
+            options: { presets: ['@babel/env','@babel/preset-react'] }
           },
           {
             // https://webpack.js.org/loaders/coffee-loader/
-            loader: "coffee-loader"
+            loader: "coffee-loader",
+            options: { presets: ['@babel/env','@babel/preset-react'] }
           }
         ]
       },
@@ -108,21 +107,21 @@ module.exports = {
   optimization: {
     minimize: prodMode,
     minimizer: [
-      // https://v4.webpack.js.org/plugins/terser-webpack-plugin/
-      new TerserPlugin({
-        exclude: /\/modules/,
-        terserOptions: {
-          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-          sourceMap: false, // Must be set to true if using source-maps in production
-          format: {
-            comments: false
-          },
-          compress: {
-            drop_console: true,
-            passes: 2,
-          },
-	      }
-      }),
+      //  // https://v4.webpack.js.org/plugins/terser-webpack-plugin/
+      //  new TerserPlugin({
+      //    exclude: /\/modules/,
+      //    terserOptions: {
+      //      // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+      //      sourceMap: false, // Must be set to true if using source-maps in production
+      //      format: {
+      //        comments: false
+      //      },
+      //      compress: {
+      //        drop_console: true,
+      //        passes: 2,
+      //      },
+	    //    }
+      //  }),
       // https://webpack.js.org/plugins/css-minimizer-webpack-plugin/
       new CssMinimizerPlugin({
         exclude: /\/modules/,
@@ -171,25 +170,27 @@ module.exports = {
     bootstrap: "bootstrap",
     tinyMCE: "tinymce"
   },
-resolve: {
-  alias: {
-    'app/components/TableCell': path.resolve(__dirname, 'app/components/TableCell.coffee'),
-    'app/components/Checkbox': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/Checkbox.coffee'),
-    'app/components/HiddenField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/HiddenField.coffee'),
-    'app/components/MultiChoice': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/MultiChoice.coffee'),
-    'app/components/MultiSelect': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/MultiSelect.coffee'),
-    'app/components/MultiValue': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/MultiValue.coffee'),
-    'app/components/NumericField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/NumericField.coffee'),
-    'app/components/CalculatedField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/CalculatedField.coffee'),
-    'app/components/ReadonlyField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/ReadonlyField.coffee'),
-    'app/components/Select': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/Select.coffee'),
-    'app/components/StringField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/StringField.coffee'),
-    'app/components/TextField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/TextField.coffee'),
-    'app/components/FractionField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/FractionField.coffee'),
-    'app/components/DateTime': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/DateTime.coffee'),
-    // Add more aliases as needed for other dependencies
-  },
-  extensions: ['.js', '.jsx', '.coffee'],
-}
+  resolve: {
+    alias: {
+      SenaiteAppListing: path.resolve(__dirname, '../../senaite.app.listing/webpack/app/components/'),
+      // 'SenaiteAppListing/TableCell': path.resolve(__dirname, 'app/components/TableCell.coffee'),
+      // 'app/components/TableCell': path.resolve(__dirname, 'app/components/TableCell.coffee'),
+      // 'app/components/Checkbox': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/Checkbox.coffee'),
+      // 'app/components/HiddenField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/HiddenField.coffee'),
+      // 'app/components/MultiChoice': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/MultiChoice.coffee'),
+      // 'app/components/MultiSelect': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/MultiSelect.coffee'),
+      // 'app/components/MultiValue': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/MultiValue.coffee'),
+      // 'app/components/NumericField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/NumericField.coffee'),
+      // 'app/components/CalculatedField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/CalculatedField.coffee'),
+      // 'app/components/ReadonlyField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/ReadonlyField.coffee'),
+      // 'app/components/Select': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/Select.coffee'),
+      // 'app/components/StringField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/StringField.coffee'),
+      // 'app/components/TextField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/TextField.coffee'),
+      // 'app/components/FractionField': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/FractionField.coffee'),
+      // 'app/components/DateTime': path.resolve(__dirname, '../senaite.app.listing/webpack/app/components/DateTime.coffee'),
+      // Add more aliases as needed for other dependencies
+    },
+    extensions: ['.js', '.jsx', '.coffee'],
+  }
 
 };
