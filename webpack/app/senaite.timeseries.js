@@ -3,13 +3,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import TableCell from './components/TableCell.coffee';
 
-
 document.addEventListener("DOMContentLoaded", () => {
   console.debug("*** SENAITE TIMESERIES JS LOADED ***");
-  const root = document.getElementByClassName('form-control');  // The mount point in the main app
-  debugger;
-  ReactDOM.render(<TableCell />, root);
+
+  const waitForResultElement = setInterval(() => {
+    const root = document.querySelector('#sample-sections > div > div:nth-child(2) > div table > tbody>  tr > td.contentcell.Result');
+
+    if (root) {
+      clearInterval(waitForResultElement);
+      console.debug("Root element found:", root);
+
+      // Render the customized TableCell
+      ReactDOM.render(<TableCell />, root);
+    } else {
+      console.debug("Root element not found, waiting...");
+    }
+  }, 100);  // Check every 100ms
 });
+
 
 
 
