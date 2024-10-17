@@ -2,52 +2,6 @@
   define="portal context/@@plone_portal_state/portal;"
   i18n:domain="senaite.timeseries">
 
-  <!-- Load d3.js -->
-  <script src="https://d3js.org/d3.v4.js"></script>
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    loadLineChart();
-
-    function loadLineChart() {
-      const data = [
-        { x: 1, y: 2 },
-        { x: 2, y: 5 },
-        { x: 3, y: 3 },
-        { x: 4, y: 7 }
-      ];
-
-      // Create SVG element
-      const svg = d3.select("#line-chart")
-        .append("svg")
-        .attr("width", 400)
-        .attr("height", 300)
-        .style("border", "1px solid black");
-
-      // Scales for x and y axes
-      const xScale = d3.scaleLinear()
-        .domain([1, 4])
-        .range([50, 350]);
-      const yScale = d3.scaleLinear()
-        .domain([0, 8])
-        .range([250, 50]);
-
-      // Line generator
-      const line = d3.line()
-        .x(d => xScale(d.x))
-        .y(d => yScale(d.y));
-
-      // Append line path to SVG
-      svg.append("path")
-        .datum(data)
-        .attr("d", line)
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 2)
-        .attr("fill", "none");
-
-    }
-  })
-  </script>
-
   <!-- Results entry listing -->
   <form name="listing_form"
         class="form form-inline"
@@ -75,8 +29,5 @@
                          data-review_states python:view.ajax_review_states();">
     </div>
   </form>
-
-  <!-- Create a div where the graph will take place -->
-  <div id="line-chart"></div>
 
 </tal:contents_table>
