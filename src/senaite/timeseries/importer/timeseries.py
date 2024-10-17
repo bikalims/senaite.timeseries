@@ -66,6 +66,26 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
 
         return 0
 
+    def format_values(self, result):
+        formatted = []
+        for value in result:
+            try:
+                value = int(value)
+                value = "%d" % value
+                formatted.append(value)
+                continue
+            except Exception:
+                pass
+            try:
+                value = float(value)
+                value = "{:0.2f}".format(value)
+                formatted.append(value)
+                continue
+            except Exception:
+                pass
+            formatted.append(value)
+        return formatted
+
     def parse_resultsline(self, line):
         """Parses result lines"""
         splitted = [token.strip() for token in line.split(self._delimiter)]
@@ -78,6 +98,7 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
             return 0
 
         result = splitted[1 : len(self._column_headers) + 1]  # noqa
+        result = self.format_values(result)
         self._result.append(result)
 
         return 0
