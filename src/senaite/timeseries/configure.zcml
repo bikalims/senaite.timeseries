@@ -15,6 +15,7 @@
 
   <include package=".browser" />
   <include package=".extenders" />
+  <include package=".importer" />
 
   <include file="permissions.zcml" />
 
