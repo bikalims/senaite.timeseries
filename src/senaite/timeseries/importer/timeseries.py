@@ -67,6 +67,8 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
         return 0
 
     def format_values(self, result):
+        precision = self._analysis_service.Precision
+        float_fmt = "{:0." + str(precision) + "f}"
         formatted = []
         for value in result:
             try:
@@ -78,7 +80,7 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
                 pass
             try:
                 value = float(value)
-                value = "{:0.2f}".format(value)
+                value = float_fmt.format(value)
                 formatted.append(value)
                 continue
             except Exception:
