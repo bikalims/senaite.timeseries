@@ -18,7 +18,7 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
 
     def __init__(self, infile, worksheet=2, encoding=None, instrument_uid=None):
         InstrumentXLSResultsFileParser.__init__(
-            self, infile, worksheet=worksheet, encoding=encoding
+            self, infile, worksheet=worksheet, encoding=encoding, data_only=True
         )
         self._end_header = False
         self._ar_id = None
