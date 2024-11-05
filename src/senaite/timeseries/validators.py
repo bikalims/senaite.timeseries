@@ -17,6 +17,8 @@ class TimeSeriesValidator:
         instance = kwargs["instance"]
         request = instance.REQUEST
         form = request.form
+        if form.get("ResultType") != "timeseries":
+            return True
         fieldname = kwargs["field"].getName()
         form_values = form.get(fieldname, False)
 
@@ -51,6 +53,8 @@ class TimeSeriesTitleValidator:
         instance = kwargs["instance"]
         request = instance.REQUEST
         form = request.form
+        if form.get("ResultType") != "timeseries":
+            return True
         fieldname = kwargs["field"].getName()
         form_values = form.get(fieldname, False)
 
