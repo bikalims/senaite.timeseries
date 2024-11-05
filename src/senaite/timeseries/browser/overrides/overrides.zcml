@@ -10,7 +10,9 @@
       <adapter
           for="bika.lims.interfaces.IAnalysisService
                zope.publisher.interfaces.browser.IBrowserRequest"
-          factory=".adapters.EditForm"/>
+          factory=".adapters.EditForm"
+          provides="senaite.core.interfaces.IAjaxEditForm"
+          />
 
       <!-- Table Lab Analyses -->
       <browser:page

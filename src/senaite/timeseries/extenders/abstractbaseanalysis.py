@@ -45,13 +45,21 @@ graph_y_axis_title_field = ExtStringField(
 time_series_columns_field = ExtRecordsField(
     "TimeSeriesColumns",
     schemata="Result Options",
-    subfields=("ColumnType", "ColumnTitle", "ColumnDataType",),
+    validators=("timeseriesvalidator",),
+    subfields=(
+        "ColumnType",
+        "ColumnTitle",
+        "ColumnDataType",
+    ),
     subfield_labels={
         "ColumnType": _("Column Type"),
         "ColumnTitle": _("Column Title"),
         "ColumnDataType": _("Column Data Type"),
     },
-    subfield_validators={},
+    subfield_validators={
+        "ColumnType": "timeseriesvalidator",
+        "ColumnTitle": "timeseriestitlevalidator",
+    },
     subfield_types={
         "ColumnType": "string",
         "ColumnTitle": "string",
@@ -62,20 +70,21 @@ time_series_columns_field = ExtRecordsField(
         # 'ColumnTitle': 25,
         "ColumnDataType": 1,
     },
-    subfield_maxlength={
-        "ColumnType": 1,
-        "ColumnTitle": 25,
-        "ColumnDataType": 1},
+    subfield_maxlength={"ColumnType": 1, "ColumnTitle": 25, "ColumnDataType": 1},
     subfield_vocabularies={
         "ColumnType": DisplayList(
-            (("index", _("Index")),
-             ("data", _("Data")),
-             ("average", _("Average")),)
+            (
+                ("index", _("Index")),
+                ("data", _("Data")),
+                ("average", _("Average")),
+            )
         ),
         "ColumnDataType": DisplayList(
-            (("float", _("Float")),
-             ("number", _("Number")),
-             ("date", _("Date")),)
+            (
+                ("float", _("Float")),
+                ("number", _("Number")),
+                ("date", _("Date")),
+            )
         ),
     },
     widget=RecordsWidget(
@@ -119,8 +128,7 @@ class BaseAnalysisSchemaModifier(object):
         self.context = context
 
     def fiddle(self, schema):
-        """
-        """
+        """ """
         if is_installed():
             schema["ResultType"].vocabulary = DisplayList(RESULT_TYPES)
 

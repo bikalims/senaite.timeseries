@@ -10,8 +10,7 @@ from senaite.timeseries.config import logger
 
 
 # Tuples of (catalog, index_name, index_attribute, index_type)
-INDEXES = [
-]
+INDEXES = []
 
 # Tuples of (catalog, column_name)
 COLUMNS = [
@@ -28,7 +27,7 @@ class HiddenProfiles(object):
     def getNonInstallableProfiles(self):
         """Hide uninstall profile from site-creation and quickinstaller."""
         return [
-            'senaite.timeseries:uninstall',
+            "senaite.timeseries:uninstall",
         ]
 
 
