@@ -6,13 +6,6 @@
        xmlns:five="http://namespaces.zope.org/five"
        i18n_domain="senaite.timeseries">
 
-      <!-- Edit Form: Analysis Service -->
-      <adapter
-          for="bika.lims.interfaces.IAnalysisService
-               zope.publisher.interfaces.browser.IBrowserRequest"
-          factory=".adapters.EditForm"
-          provides="senaite.core.interfaces.IAjaxEditForm"
-          />
 
       <!-- Table Lab Analyses -->
       <browser:page
