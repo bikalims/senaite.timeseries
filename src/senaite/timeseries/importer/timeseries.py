@@ -51,19 +51,25 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
                 return 0
             brains = get_as_by_keyword(keyword)
             if len(brains) != 1:
-                self.warn('Anaysis Service {} not found'.format(keyword))
+                self.warn("Anaysis Service {} not found".format(keyword))
                 return 0
             AS = api.get_object(brains[0])
             if not AS:
-                self.warn('Anaysis Service object for {} not found'.format(keyword))
+                self.warn("Anaysis Service object for {} not found".format(keyword))
                 return 0
+            try:
+                kw_obj = AS.getKeyword()
+            except Exception:
+                self.warn("Anaysis Service object for {} not found".format(kw_obj))
+                return 0
+
             self._analysis_service = AS
-            if not hasattr(AS, 'TimeSeriesColumns'):
-                self.warn('Anaysis Service {} is not Timeseries result type'.format(keyword))
+            if not hasattr(AS, "TimeSeriesColumns"):
+                self.warn(
+                    "Anaysis Service {} is not Timeseries result type".format(keyword)
+                )
                 return 0
-            self._column_headers = [
-                col["ColumnTitle"] for col in AS.TimeSeriesColumns
-            ]
+            self._column_headers = [col["ColumnTitle"] for col in AS.TimeSeriesColumns]
 
         if splitted[0] == "Start Date":
             self._start_date = splitted[1].strip()
@@ -114,6 +120,8 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
 
     def getRawResults(self):
         # TODO Validatiom required
+        if self._analysis_service is None:
+            return {self._ar_id: {}}
         result = [
             {
                 self._analysis_service.getKeyword(): {
