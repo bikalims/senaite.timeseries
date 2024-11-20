@@ -7,6 +7,8 @@ from bika.lims.api.analysisservice import get_by_keyword as get_as_by_keyword
 from bika.lims import bikaMessageFactory as _
 from senaite.core.exportimport.instruments import IInstrumentAutoImportInterface
 from senaite.core.exportimport.instruments import IInstrumentImportInterface
+from senaite.core.exportimport.instruments.importer import ALLOWED_ANALYSIS_STATES
+from senaite.core.exportimport.instruments.importer import ALLOWED_SAMPLE_STATES
 from senaite.core.exportimport.instruments.importer import AnalysisResultsImporter
 from bika.lims.utils import t
 from senaite.instruments.instrument import InstrumentXLSResultsFileParser
@@ -141,36 +143,52 @@ class timeseries_import(object):
     def __init__(self, context):
         self.context = context
         self.request = None
+        self.allowed_sample_states = ALLOWED_SAMPLE_STATES
+        self.allowed_analysis_states = ALLOWED_ANALYSIS_STATES
 
     def Import(self, context, request):
         """Import Form"""
-        infile = request.form["instrument_results_file"]
-        fileformat = request.form.get("instrument_results_file_format", "xlsx")
-        artoapply = request.form.get("artoapply")
-        override = request.form.get("results_override")
-        instrument_uid = request.form.get("instrument")
-        worksheet = int(request.form.get("worksheet", "2"))
+        if request is not None:
+            infile = request.form["instrument_results_file"]
+            fileformat = request.form.get("instrument_results_file_format", "xlsx")
+            artoapply = request.form.get("artoapply")
+            override = request.form.get("results_override")
+            instrument_uid = request.form.get("instrument")
+            worksheet = int(request.form.get("worksheet", "2"))
+        else:
+            # Auto_importer hack
+            artoapply = "received_tobeverified"
+            override = "overrideempty"
+            worksheet = 2
+
         errors = []
         logs = []
         warns = []
 
-        # Load the most suitable parser according to file extension/options/etc...
-        parser = None
-        if not hasattr(infile, "filename"):
-            errors.append(_("No file selected"))
-        if fileformat in ("xls", "xlsx"):
-            parser = TimeSeriesParser(
-                infile, worksheet, encoding=fileformat, instrument_uid=instrument_uid
-            )
+        if hasattr(self, "parser"):
+            # Auto improt hack
+            parser = self.parser
         else:
-            errors.append(
-                t(
-                    _(
-                        "Unrecognized file format ${fileformat}",
-                        mapping={"fileformat": fileformat},
+            # Load the most suitable parser according to file extension/options/etc...
+            parser = None
+            if not hasattr(infile, "filename"):
+                errors.append(_("No file selected"))
+            if fileformat in ("xls", "xlsx"):
+                parser = TimeSeriesParser(
+                    infile,
+                    worksheet,
+                    encoding=fileformat,
+                    instrument_uid=instrument_uid,
+                )
+            else:
+                errors.append(
+                    t(
+                        _(
+                            "Unrecognized file format ${fileformat}",
+                            mapping={"fileformat": fileformat},
+                        )
                     )
                 )
-            )
 
         if parser:
             # Load the importer
@@ -209,3 +227,22 @@ class timeseries_import(object):
         results = {"errors": errors, "log": logs, "warns": warns}
 
         return json.dumps(results)
+
+    def get_automatic_importer(self, instrument, parser, **kw):
+        """Called during automated results import"""
+        # initialize the base class with the required parameters
+        self.parser = parser
+        return self
+
+    def get_automatic_parser(self, infile):
+        """Called during automated results import
+
+        Returns the parser to be used by default for the file passed in when
+        automatic results import for this instrument interface is enabled
+        """
+        return TimeSeriesParser(infile, encoding="xlsx")
+
+    def process(self):
+        results = self.Import(self.context, request=None)
+        import pdb; pdb.set_trace()  # fmt: skip
+        return results
