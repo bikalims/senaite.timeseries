@@ -74,6 +74,7 @@ time_series_columns_field = ExtRecordsField(
     subfield_vocabularies={
         "ColumnType": DisplayList(
             (
+                ("", ""),
                 ("index", _("Index")),
                 ("data", _("Data")),
                 ("average", _("Average")),
@@ -81,6 +82,7 @@ time_series_columns_field = ExtRecordsField(
         ),
         "ColumnDataType": DisplayList(
             (
+                ("", ""),
                 ("float", _("Float")),
                 ("number", _("Number")),
                 # ("date", _("Date")),
