@@ -83,7 +83,7 @@ time_series_columns_field = ExtRecordsField(
             (
                 ("float", _("Float")),
                 ("number", _("Number")),
-                ("date", _("Date")),
+                # ("date", _("Date")),
             )
         ),
     },

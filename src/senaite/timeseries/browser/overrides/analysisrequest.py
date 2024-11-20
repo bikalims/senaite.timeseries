@@ -3,6 +3,7 @@
 from bika.lims import api
 from bika.lims.browser.analysisrequest.tables import AnalysesView as AV
 from bika.lims.utils import get_image
+from senaite.core import logger
 from senaite.core.api import dtime
 from senaite.core.permissions import ViewResults
 from senaite.timeseries.config import _
@@ -28,6 +29,9 @@ class AnalysesView(AV):
         obj = self.get_object(analysis_brain)
 
         result = obj.getResult()
+        logger.info(
+            "AnalysisRequestOverride::_folder_item_result: result: {}".format(result)
+        )
         capture_date = obj.getResultCaptureDate()
         localized_capture_date = dtime.to_localized_time(capture_date, long_format=1)
 
@@ -99,12 +103,18 @@ class AnalysesView(AV):
                 item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
 
         if not result:
+            logger.info("AnalysisRequestOverride::_folder_item_result: no result")
             return
 
         formatted_result = obj.getFormattedResult(
             sciformat=int(self.scinot), decimalmark=self.dmk
         )
         item["formatted_result"] = formatted_result
+        logger.info(
+            "AnalysisRequestOverride::_folder_item_result: formatted_result: {}".format(
+                formatted_result
+            )
+        )
 
     def folderitems(self):
         # This shouldn't be required here, but there are some views that calls
@@ -119,6 +129,9 @@ class AnalysesView(AV):
         for item in items:
             if not item.get("time_series_columns"):
                 newitems.append(item)
+        logger.info(
+            "AnalysisRequestOverride::folderitems: found {} items".format(len(newitems))
+        )
         return newitems
 
 
