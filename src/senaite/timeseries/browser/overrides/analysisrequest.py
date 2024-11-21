@@ -85,9 +85,7 @@ class AnalysesView(AV):
                 )
 
             if result_type == "timeseries":
-                item["time_series_columns"] = [
-                    o["ColumnTitle"] for o in obj.TimeSeriesColumns
-                ]
+                item["time_series_columns"] = obj.TimeSeriesColumns
                 item["time_series_graph_title"] = obj.GraphTitle
                 item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
                 item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
@@ -95,9 +93,7 @@ class AnalysesView(AV):
             # Edit mode is NOT enabled of this Analysis
             if result_type == "timeseries":
                 item["result_type"] = "timeseries_readonly"
-                item["time_series_columns"] = [
-                    o["ColumnTitle"] for o in obj.TimeSeriesColumns
-                ]
+                item["time_series_columns"] = obj.TimeSeriesColumns
                 item["time_series_graph_title"] = obj.GraphTitle
                 item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
                 item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
