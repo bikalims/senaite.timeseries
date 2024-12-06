@@ -103,10 +103,11 @@ class ManageResultsView(AnalysesView):
         for item in items:
             if item.get("result_type") == "timeseries":
                 newitems.append(item)
-                cats.append(item["category"])
+                if item["category"] not in cats:
+                    cats.append(item["category"])
         logger.info(
-            "AnalysisRequestOverride::folderitems: found {} items with timeseries items".format(
-                len(newitems)
+            "AnalysisRequestOverride::folderitems: found {} items with timeseries items and {} categories".format(
+                len(newitems), len(cats)
             )
         )
         self.categories = cats
