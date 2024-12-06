@@ -122,12 +122,17 @@ class AnalysesView(AV):
         # Note we call AnalysesView's base class!
         items = super(AnalysesView, self).folderitems()
         newitems = []
+        cats = []
         for item in items:
-            if not item.get("time_series_columns"):
+            if item.get("result_type") != "timeseries":
                 newitems.append(item)
+                cats.append(item["category"])
         logger.info(
-            "AnalysisRequestOverride::folderitems: found {} items".format(len(newitems))
+            "AnalysisRequestOverride::folderitems: found {} items with no timeseries items".format(
+                len(newitems)
+            )
         )
+        self.categories = cats
         return newitems
 
 
