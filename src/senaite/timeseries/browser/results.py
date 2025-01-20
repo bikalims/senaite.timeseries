@@ -101,6 +101,8 @@ class ManageResultsView(AnalysesView):
         newitems = []
         cats = []
         for item in items:
+            if "result_type" not in item:
+                continue
             if item.get("result_type").startswith("timeseries"):
                 newitems.append(item)
                 if item["category"] not in cats:
