@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import json
 from bika.lims import api
 from bika.lims.browser.analysisrequest.tables import AnalysesView as AV
 from bika.lims.utils import get_image
@@ -8,27 +7,10 @@ from senaite.core import logger
 from senaite.core.api import dtime
 from senaite.core.permissions import ViewResults
 from senaite.timeseries.config import _
+from senaite.timeseries.utils import format_timeseries
 
 
 class AnalysesView(AV):
-    def _format_timeseries(self, obj, results):
-        min_range = float(obj.ResultsRange.get("min", "-1000000"))
-        max_range = float(obj.ResultsRange.get("max", "1000000"))
-        values = json.loads(results)
-        new_results = []
-        for row in values:
-            new_row = []
-            for val in row:
-                OOR = False
-                try:
-                    new_val = float(val)
-                    if new_val < min_range or new_val > max_range:
-                        OOR = True
-                except Exception:
-                    new_val = val
-                new_row.append({"val": val, "OOR": OOR})
-            new_results.append(new_row)
-        return json.dumps(new_results)
 
     def _folder_item_result(self, analysis_brain, item):
         """Set the analysis' result to the item passed in.
@@ -126,7 +108,7 @@ class AnalysesView(AV):
             )
         )
         if result_type == "timeseries":
-            item["time_series_values"] = self._format_timeseries(obj, result)
+            item["time_series_values"] = format_timeseries(obj, result)
             item["time_series_columns"] = obj.TimeSeriesColumns
             item["time_series_graph_title"] = obj.GraphTitle
             item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
