@@ -20,10 +20,11 @@
 
 from bika.lims import api
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+from senaite.core import logger
+from senaite.core.browser.viewlets.sampleanalyses import LabAnalysesViewlet
 from senaite.timeseries.config import is_installed
 from senaite.timeseries.config import _
 from senaite.timeseries.browser.overrides.analysisrequest import AnalysesView
-from senaite.core.browser.viewlets.sampleanalyses import LabAnalysesViewlet
 
 
 class TimeSeriesAnalysesViewlet(LabAnalysesViewlet):
@@ -98,9 +99,20 @@ class ManageResultsView(AnalysesView):
         # Note we call AnalysesView's base class!
         items = super(AnalysesView, self).folderitems()
         newitems = []
+        cats = []
         for item in items:
-            if item.get("time_series_columns"):
+            if "result_type" not in item:
+                continue
+            if item.get("result_type").startswith("timeseries"):
                 newitems.append(item)
+                if item["category"] not in cats:
+                    cats.append(item["category"])
+        logger.info(
+            "AnalysisRequestOverride::folderitems: found {} items with timeseries items and {} categories".format(
+                len(newitems), len(cats)
+            )
+        )
+        self.categories = cats
         return newitems
 
 
@@ -118,5 +130,5 @@ def get_timeseries_analyses(sample, short_title=None, skip_invalid=True):
     # Skip invalid analyses
     skip = skip_invalid and ["cancelled", "retracted", "rejected"] or []
     analyses = filter(lambda a: api.get_review_status(a) not in skip, analyses)
-    analyses = filter(lambda a: a.TimeSeriesColumns, analyses)
+    analyses = filter(lambda a: a.getResultType() == "timeseries", analyses)
     return analyses

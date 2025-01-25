@@ -7,9 +7,11 @@ from senaite.core import logger
 from senaite.core.api import dtime
 from senaite.core.permissions import ViewResults
 from senaite.timeseries.config import _
+from senaite.timeseries.utils import format_timeseries
 
 
 class AnalysesView(AV):
+
     def _folder_item_result(self, analysis_brain, item):
         """Set the analysis' result to the item passed in.
 
@@ -85,22 +87,12 @@ class AnalysesView(AV):
                 )
 
             if result_type == "timeseries":
-                item["time_series_columns"] = [
-                    o["ColumnTitle"] for o in obj.TimeSeriesColumns
-                ]
-                item["time_series_graph_title"] = obj.GraphTitle
-                item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
-                item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
+                item["time_series_columns"] = obj.TimeSeriesColumns
+
         else:
             # Edit mode is NOT enabled of this Analysis
             if result_type == "timeseries":
                 item["result_type"] = "timeseries_readonly"
-                item["time_series_columns"] = [
-                    o["ColumnTitle"] for o in obj.TimeSeriesColumns
-                ]
-                item["time_series_graph_title"] = obj.GraphTitle
-                item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
-                item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
 
         if not result:
             logger.info("AnalysisRequestOverride::_folder_item_result: no result")
@@ -115,6 +107,12 @@ class AnalysesView(AV):
                 formatted_result
             )
         )
+        if result_type == "timeseries":
+            item["time_series_values"] = format_timeseries(obj, result)
+            item["time_series_columns"] = obj.TimeSeriesColumns
+            item["time_series_graph_title"] = obj.GraphTitle
+            item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
+            item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
 
     def folderitems(self):
         # This shouldn't be required here, but there are some views that calls
@@ -126,12 +124,20 @@ class AnalysesView(AV):
         # Note we call AnalysesView's base class!
         items = super(AnalysesView, self).folderitems()
         newitems = []
+        cats = []
         for item in items:
-            if not item.get("time_series_columns"):
+            if "result_type" not in item or not item.get("result_type").startswith(
+                "timeseries"
+            ):
                 newitems.append(item)
+                if item["category"] not in cats:
+                    cats.append(item["category"])
         logger.info(
-            "AnalysisRequestOverride::folderitems: found {} items".format(len(newitems))
+            "AnalysisRequestOverride::folderitems: found {} items with without timeseries items and {} categories".format(
+                len(newitems), len(cats)
+            )
         )
+        self.categories = cats
         return newitems
 
 
