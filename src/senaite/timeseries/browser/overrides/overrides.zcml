@@ -1,6 +1,4 @@
 <configure xmlns="http://namespaces.zope.org/zope"
-       xmlns:zcml="http://namespaces.zope.org/browser"
-       xmlns:fss="http://namespaces.zope.org/browser"
        xmlns:plone="http://namespaces.plone.org/plone"
        xmlns:browser="http://namespaces.zope.org/browser"
        xmlns:five="http://namespaces.zope.org/five"
@@ -31,7 +29,15 @@
           name="senaite.core.samplesection.lab_analyses"
           manager="senaite.core.browser.viewlets.interfaces.ISampleSection"
           class=".sampleanalyses.LabAnalysesViewlet"
-          layer="senaite.core.interfaces.ISenaiteCore"
+          layer="senaite.timeseries.interfaces.ISenaiteTimeseriesLayer"
           permission="zope2.View" />
+
+      <!-- Auto Import Results View -->
+      <browser:page
+          for="*"
+          name="auto_import_timeseries_results"
+          class="senaite.timeseries.browser.overrides.auto_import_results.AutoImportResultsView"
+          permission="zope.Public"
+          />
 
 </configure>
