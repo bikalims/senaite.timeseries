@@ -102,6 +102,9 @@ class ManageResultsView(AnalysesView):
         cats = []
         for item in items:
             if "result_type" not in item:
+                logger.info(
+                    "AnalysisRequestOverride::folderitems: result_type not in item"
+                )
                 continue
             if item.get("result_type").startswith("timeseries"):
                 newitems.append(item)
