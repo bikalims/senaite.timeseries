@@ -5,6 +5,7 @@ from os.path import abspath
 from bika.lims import api
 from bika.lims.api.analysisservice import get_by_keyword as get_as_by_keyword
 from bika.lims import bikaMessageFactory as _
+from senaite.core.catalog import SAMPLE_CATALOG
 from senaite.core.exportimport.instruments import IInstrumentAutoImportInterface
 from senaite.core.exportimport.instruments import IInstrumentImportInterface
 from senaite.core.exportimport.instruments.importer import ALLOWED_ANALYSIS_STATES
@@ -50,38 +51,44 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
                 self.err("Sample ID not provided")
                 return -1
 
+            query = {"portal_type": "AnalysisRequest", "id": self._ar_id}
+            brains = api.search(query, SAMPLE_CATALOG)
+            if len(brains) == 0:
+                self.err("Sample ID {} does not exist".format(self._ar_id))
+                return -1
+
         if splitted[0] == "Analysis":
             keyword = splitted[1].strip()
             if not keyword:
                 self.err("Analysis not provided")
-                return 0
+                return -1
             brains = get_as_by_keyword(keyword)
             if len(brains) != 1:
                 self.warn("Anaysis Service {} not found".format(keyword))
-                return 0
+                return -1
             AS = api.get_object(brains[0])
             if not AS:
                 self.warn("Anaysis Service object for {} not found".format(keyword))
-                return 0
+                return -1
             try:
                 kw_obj = AS.getKeyword()
             except Exception:
                 self.warn("Anaysis Service object for {} not found".format(kw_obj))
-                return 0
+                return -1
 
             self._analysis_service = AS
             if not hasattr(AS, "TimeSeriesColumns"):
                 self.warn(
                     "Anaysis Service {} is not Timeseries result type".format(keyword)
                 )
-                return 0
+                return -1
             self._column_headers = [col["ColumnTitle"] for col in AS.TimeSeriesColumns]
 
         if splitted[0] == "Start Date":
             self._start_date = splitted[1].strip()
             if not self._start_date:
                 self.warn("Start date not provided")
-                return 0
+                return -1
 
         return 0
 
