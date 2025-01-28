@@ -47,12 +47,13 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
         if splitted[0] == "Sample ID":
             self._ar_id = splitted[1].strip()
             if self._ar_id is None or len(self._ar_id) == 0:
-                self.err("Sample ID not found")
+                self.err("Sample ID not provided")
                 return -1
 
         if splitted[0] == "Analysis":
             keyword = splitted[1].strip()
             if not keyword:
+                self.err("Analysis not provided")
                 return 0
             brains = get_as_by_keyword(keyword)
             if len(brains) != 1:
@@ -78,6 +79,9 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
 
         if splitted[0] == "Start Date":
             self._start_date = splitted[1].strip()
+            if not self._start_date:
+                self.warn("Start date not provided")
+                return 0
 
         return 0
 
@@ -220,9 +224,11 @@ class timeseries_import(object):
             tbex = ""
             try:
                 importer.process()
-                self.errors.append(importer.errors)
-                self.logs.append(importer.logs)
-                self.warns.append(importer.warns)
+                if not importer._parser._result or len(importer._parser._result) == 0:
+                    self.errors.append("No data found")
+                self.errors.extend(importer.errors)
+                self.logs.extend(importer.logs)
+                self.warns.extend(importer.warns)
             except Exception:
                 tbex = traceback.format_exc()
                 self.errors.append(tbex)
