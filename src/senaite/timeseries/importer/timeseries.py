@@ -94,23 +94,29 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
 
     def format_values(self, result):
         precision = self._analysis_service.Precision
+        column_data = self._analysis_service.TimeSeriesColumns
         float_fmt = "{:0." + str(precision) + "f}"
         formatted = []
-        for value in result:
-            try:
-                value = int(value)
-                value = "%d" % value
-                formatted.append(value)
-                continue
-            except Exception:
-                pass
-            try:
-                value = float(value)
-                value = float_fmt.format(value)
-                formatted.append(value)
-                continue
-            except Exception:
-                pass
+        for idx, value in enumerate(result):
+            col_type = column_data[idx]["ColumnDataType"]
+            if col_type is None:
+                import pdb; pdb.set_trace()  # fmt: skip
+            if col_type == "number":
+                try:
+                    value = int(value)
+                    value = "%d" % value
+                    formatted.append(value)
+                    continue
+                except Exception:
+                    pass
+            if col_type == "float":
+                try:
+                    value = float(value)
+                    value = float_fmt.format(value)
+                    formatted.append(value)
+                    continue
+                except Exception:
+                    pass
             formatted.append(value)
         return formatted
 
