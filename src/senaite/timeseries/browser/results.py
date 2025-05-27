@@ -30,7 +30,7 @@ from senaite.timeseries.browser.overrides.analysisrequest import AnalysesView
 class TimeSeriesAnalysesViewlet(LabAnalysesViewlet):
     """TimeSeries Analyses section viewlet for Sample view"""
 
-    title = _("Timeseries Results")
+    title = _("Graphs")
     icon_name = "client"
     capture = "timeseries"
 
