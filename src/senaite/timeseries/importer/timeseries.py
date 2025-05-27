@@ -98,9 +98,7 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
         float_fmt = "{:0." + str(precision) + "f}"
         formatted = []
         for idx, value in enumerate(result):
-            col_type = column_data[idx]["ColumnDataType"]
-            if col_type is None:
-                import pdb; pdb.set_trace()  # fmt: skip
+            col_type = column_data[idx].get("ColumnDataType", "number")
             if col_type == "number":
                 try:
                     value = int(value)

@@ -13,3 +13,9 @@ RESULT_TYPES = (
     ("multivalue", _("Multiple values")),
     ("timeseries", _("Time series")),
 )
+
+INTERPOLCATIONS = (
+    ("curveBasis", _("Basis")),
+    ("curveCardinal", _("Cardinal")),
+    ("curveLinear", _("Linear")),
+)

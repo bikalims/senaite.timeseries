@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from Products.Archetypes.Widget import StringWidget
+from Products.Archetypes.Widget import SelectionWidget
 from Products.Archetypes.utils import DisplayList
 from archetypes.schemaextender.interfaces import IBrowserLayerAwareExtender
 from archetypes.schemaextender.interfaces import ISchemaExtender
@@ -14,8 +15,22 @@ from bika.lims.browser.widgets.recordswidget import RecordsWidget
 from bika.lims.interfaces import IBaseAnalysis
 from senaite.timeseries.config import _
 from senaite.timeseries.config import is_installed
+from senaite.timeseries.vocabularies import INTERPOLCATIONS
 from senaite.timeseries.vocabularies import RESULT_TYPES
 from senaite.timeseries.interfaces import ISenaiteTimeseriesLayer
+
+
+# Type of control to be rendered on results entry
+graph_interpolation = ExtStringField(
+    "GraphInterpolation",
+    schemata="Result Options",
+    default="curveBasis",
+    vocabulary=DisplayList(INTERPOLCATIONS),
+    widget=SelectionWidget(
+        label=_("Interpolation"),
+        format="select",
+    ),
+)
 
 
 graph_title_field = ExtStringField(
@@ -105,6 +120,7 @@ class BaseAnalysisSchemaExtender(object):
     layer = ISenaiteTimeseriesLayer
 
     fields = [
+        graph_interpolation,
         graph_title_field,
         graph_x_axis_title_field,
         graph_y_axis_title_field,

@@ -15,6 +15,7 @@ INDEXES = []
 # Tuples of (catalog, column_name)
 COLUMNS = [
     (SETUP_CATALOG, "getTimeSeriesColumns"),
+    (SETUP_CATALOG, "getGraphInterpolation"),
     (SETUP_CATALOG, "getGraphTitle"),
     (SETUP_CATALOG, "getGraphXAxisTitle"),
     (SETUP_CATALOG, "getGraphYAxisTitle"),

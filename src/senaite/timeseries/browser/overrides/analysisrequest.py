@@ -110,6 +110,7 @@ class AnalysesView(AV):
         if result_type == "timeseries":
             item["time_series_values"] = format_timeseries(obj, result)
             item["time_series_columns"] = obj.TimeSeriesColumns
+            item["time_series_graph_interpolation"] = obj.GraphInterpolation
             item["time_series_graph_title"] = obj.GraphTitle
             item["time_series_graph_xaxis"] = obj.GraphXAxisTitle
             item["time_series_graph_yaxis"] = obj.GraphYAxisTitle
