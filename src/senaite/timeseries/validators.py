@@ -3,6 +3,12 @@ from Products.validation.interfaces.IValidator import IValidator
 from senaite.core.i18n import translate as _t
 from senaite.timeseries.config import _
 from zope.interface import implements
+import re
+
+
+def is_valid_color_string(color_string):
+    pattern = r"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+    return bool(re.match(pattern, color_string))
 
 
 class TimeSeriesValidator:
@@ -70,3 +76,30 @@ class TimeSeriesTitleValidator:
 
 
 validation.register(TimeSeriesTitleValidator())
+
+
+class TimeSeriesColorValidator:
+    """Ensure column color is valid color."""
+
+    implements(IValidator)
+    name = "timeseriescolorvalidator"
+
+    def __call__(self, value, *args, **kwargs):
+        instance = kwargs["instance"]
+        request = instance.REQUEST
+        form = request.form
+        if form.get("ResultType") != "timeseries":
+            return True
+        fieldname = kwargs["field"].getName()
+        form_values = form.get(fieldname, False)
+
+        # Column colors must be a valid color string
+        for idx, col in enumerate(form_values):
+            col_num = idx + 1
+            color = col.get("ColumnColor", "")
+            if len(color) > 0 and not is_valid_color_string(color):
+                return _t(_("Column {} has invalid Color {}".format(col_num, color)))
+        return True
+
+
+validation.register(TimeSeriesColorValidator())

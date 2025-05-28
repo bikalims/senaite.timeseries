@@ -60,32 +60,46 @@ graph_y_axis_title_field = ExtStringField(
 time_series_columns_field = ExtRecordsField(
     "TimeSeriesColumns",
     schemata="Result Options",
-    validators=("timeseriesvalidator",),
+    validators=(
+        "timeseriesvalidator",
+        "timeseriestitlevalidator",
+        "timeseriescolorvalidator",
+    ),
     subfields=(
         "ColumnType",
         "ColumnTitle",
         "ColumnDataType",
+        "ColumnColor",
     ),
     subfield_labels={
         "ColumnType": _("Column Type"),
         "ColumnTitle": _("Column Title"),
         "ColumnDataType": _("Column Data Type"),
+        "ColumnColor": _("Column Color"),
     },
     subfield_validators={
         "ColumnType": "timeseriesvalidator",
         "ColumnTitle": "timeseriestitlevalidator",
+        "ColumnColor": "timeseriescolorvalidator",
     },
     subfield_types={
         "ColumnType": "string",
         "ColumnTitle": "string",
         "ColumnDataType": "string",
+        "ColumnColor": "string",
     },
     subfield_sizes={
         "ColumnType": 1,
         # 'ColumnTitle': 25,
         "ColumnDataType": 1,
+        # "ColumnColor": 8,
     },
-    subfield_maxlength={"ColumnType": 1, "ColumnTitle": 25, "ColumnDataType": 1},
+    subfield_maxlength={
+        "ColumnType": 1,
+        "ColumnTitle": 25,
+        "ColumnDataType": 1,
+        "ColumnColor": 8,
+    },
     subfield_vocabularies={
         "ColumnType": DisplayList(
             (
