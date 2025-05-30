@@ -1,0 +1,15 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="senaite.timeseries">
+
+    <genericsetup:upgradeStep
+       title="Upgrade to SENAITE TIMESERIES 1.0.1"
+       description="Add GraphInterpolation"
+       source="1000"
+       destination="1001"
+       handler="senaite.timeseries.upgrade.v01_00_001.upgrade"
+       profile="senaite.timeseries:default"/>
+
+</configure>
+

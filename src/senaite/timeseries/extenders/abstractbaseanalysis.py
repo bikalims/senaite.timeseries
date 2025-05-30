@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
+from AccessControl import ClassSecurityInfo
 from Products.Archetypes.Widget import StringWidget
 from Products.Archetypes.Widget import SelectionWidget
 from Products.Archetypes.utils import DisplayList
+from Products.CMFCore import permissions
 from archetypes.schemaextender.interfaces import IBrowserLayerAwareExtender
 from archetypes.schemaextender.interfaces import ISchemaExtender
 from archetypes.schemaextender.interfaces import ISchemaModifier
@@ -26,6 +28,7 @@ graph_interpolation = ExtStringField(
     schemata="Result Options",
     default="curveBasis",
     vocabulary=DisplayList(INTERPOLCATIONS),
+    accessor="getGraphInterpolation",
     widget=SelectionWidget(
         label=_("Interpolation"),
         format="select",
@@ -133,6 +136,8 @@ class BaseAnalysisSchemaExtender(object):
     adapts(IBaseAnalysis)
     layer = ISenaiteTimeseriesLayer
 
+    security = ClassSecurityInfo()
+
     fields = [
         graph_interpolation,
         graph_title_field,
@@ -149,6 +154,26 @@ class BaseAnalysisSchemaExtender(object):
 
     def getFields(self):
         return self.fields
+
+    @security.protected(permissions.View)
+    def getGraphInterpolation(self):
+        accessor = self.accessor("GraphInterpolation")
+        return accessor(self)
+
+    @security.protected(permissions.ModifyPortalContent)
+    def setGraphInterpolation(self, value):
+        mutator = self.mutator("GraphInterpolation")
+        mutator(self, value)
+
+    @security.protected(permissions.View)
+    def getGraphTitle(self):
+        accessor = self.accessor("GraphTitle")
+        return accessor(self)
+
+    @security.protected(permissions.ModifyPortalContent)
+    def setGraphTitle(self, value):
+        mutator = self.mutator("GraphTitle")
+        mutator(self, value)
 
 
 class BaseAnalysisSchemaModifier(object):
