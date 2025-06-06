@@ -131,14 +131,16 @@ class AnalysesView(AV):
                 "timeseries"
             ):
                 newitems.append(item)
-                if item["category"] not in cats:
-                    cats.append(item["category"])
+                if self.show_categories:
+                    if item["category"] not in cats:
+                        cats.append(item["category"])
         logger.info(
             "AnalysisRequestOverride::folderitems: found {} items with without timeseries items and {} categories".format(
                 len(newitems), len(cats)
             )
         )
-        self.categories = cats
+        if self.show_categories:
+            self.categories = cats
         return newitems
 
 
