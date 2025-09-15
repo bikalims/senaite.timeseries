@@ -32,10 +32,14 @@ class AnalysesView(AV):
 
         result = obj.getResult()
         logger.info(
-            "AnalysisRequestOverride::_folder_item_result: result: {}".format(result)
+            "AnalysisRequestOverride::_folder_item_result: result: {}".format(
+                result
+            )
         )
         capture_date = obj.getResultCaptureDate()
-        localized_capture_date = dtime.to_localized_time(capture_date, long_format=1)
+        localized_capture_date = dtime.to_localized_time(
+            capture_date, long_format=1
+        )
 
         item["Result"] = result
         item["ResultCaptureDate"] = dtime.to_iso_format(capture_date)
@@ -95,7 +99,9 @@ class AnalysesView(AV):
                 item["result_type"] = "timeseries_readonly"
 
         if not result:
-            logger.info("AnalysisRequestOverride::_folder_item_result: no result")
+            logger.info(
+                "AnalysisRequestOverride::_folder_item_result: no result"
+            )
             return
 
         formatted_result = obj.getFormattedResult(
@@ -127,9 +133,9 @@ class AnalysesView(AV):
         newitems = []
         cats = []
         for item in items:
-            if "result_type" not in item or not item.get("result_type").startswith(
-                "timeseries"
-            ):
+            if "result_type" not in item or not item.get(
+                "result_type"
+            ).startswith("timeseries"):
                 newitems.append(item)
                 if self.show_categories:
                     if item["category"] not in cats:
@@ -149,7 +155,10 @@ class FieldAnalysesTable(AnalysesView):
         super(FieldAnalysesTable, self).__init__(context, request)
 
         self.contentFilter.update(
-            {"getPointOfCapture": "field", "getAncestorsUIDs": [api.get_uid(context)]}
+            {
+                "getPointOfCapture": "field",
+                "getAncestorsUIDs": [api.get_uid(context)],
+            }
         )
 
         self.form_id = "%s_field_analyses" % api.get_id(context)
@@ -166,7 +175,10 @@ class LabAnalysesTable(AnalysesView):
         super(LabAnalysesTable, self).__init__(context, request)
 
         self.contentFilter.update(
-            {"getPointOfCapture": "lab", "getAncestorsUIDs": [api.get_uid(context)]}
+            {
+                "getPointOfCapture": "lab",
+                "getAncestorsUIDs": [api.get_uid(context)],
+            }
         )
 
         self.form_id = "%s_lab_analyses" % api.get_id(context)
