@@ -29,10 +29,7 @@ graph_interpolation = ExtStringField(
     default="curveBasis",
     vocabulary=DisplayList(INTERPOLCATIONS),
     accessor="getGraphInterpolation",
-    widget=SelectionWidget(
-        label=_("Interpolation"),
-        format="select",
-    ),
+    widget=SelectionWidget(label=_("Interpolation"), format="select",),
 )
 
 
@@ -49,7 +46,9 @@ graph_x_axis_title_field = ExtStringField(
     schemata="Result Options",
     widget=StringWidget(
         label=_("Graph X-Axis Title"),
-        description=_("Title that appears on the X-Axis of the time series graph"),
+        description=_(
+            "Title that appears on the X-Axis of the time series graph"
+        ),
     ),
 )
 graph_y_axis_title_field = ExtStringField(
@@ -57,7 +56,9 @@ graph_y_axis_title_field = ExtStringField(
     schemata="Result Options",
     widget=StringWidget(
         label=_("Graph Y-Axis Title"),
-        description=_("Title that appears on the Y-Axis of the time series graph"),
+        description=_(
+            "Title that appears on the Y-Axis of the time series graph"
+        ),
     ),
 )
 time_series_columns_field = ExtRecordsField(
@@ -68,12 +69,7 @@ time_series_columns_field = ExtRecordsField(
         "timeseriestitlevalidator",
         "timeseriescolorvalidator",
     ),
-    subfields=(
-        "ColumnType",
-        "ColumnTitle",
-        "ColumnDataType",
-        "ColumnColor",
-    ),
+    subfields=("ColumnType", "ColumnTitle", "ColumnDataType", "ColumnColor",),
     subfield_labels={
         "ColumnType": _("Column Type"),
         "ColumnTitle": _("Column Title"),

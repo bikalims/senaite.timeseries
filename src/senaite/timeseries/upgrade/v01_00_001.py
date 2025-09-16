@@ -37,7 +37,9 @@ def upgrade(tool):
     portal = api.get_portal()
     setup = portal.portal_setup
 
-    logger.info("Upgrading {0}: {1} -> {2}".format(PRODUCT_NAME, ver_from, version))
+    logger.info(
+        "Upgrading {0}: {1} -> {2}".format(PRODUCT_NAME, ver_from, version)
+    )
 
     # -------- ADD YOUR STUFF BELOW --------
 

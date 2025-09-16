@@ -2,9 +2,9 @@
 #
 # This file is part of SENAITE.TIMESERIES.
 #
-# SENAITE.TIMESERIES is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free
-# Software Foundation, version 2.
+# SENAITE.TIMESERIES is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as published by
+# the Free # Software Foundation, version 2.
 #
 # This program is distributed in the hope that it will be useful, but WITHOUT
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
@@ -53,13 +53,18 @@ class TimeSeriesAnalysesViewlet(LabAnalysesViewlet):
 class ManageResultsView(AnalysesView):
     """Listing view for Time Series results entry"""
 
-    contents_table_template = ViewPageTemplateFile("templates/timeseries_results.pt")
+    contents_table_template = ViewPageTemplateFile(
+        "templates/timeseries_results.pt"
+    )
 
     def __init__(self, context, request):
         super(ManageResultsView, self).__init__(context, request)
 
         self.contentFilter.update(
-            {"getPointOfCapture": "lab", "getAncestorsUIDs": [api.get_uid(context)]}
+            {
+                "getPointOfCapture": "lab",
+                "getAncestorsUIDs": [api.get_uid(context)],
+            }
         )
 
         self.form_id = "%s_lab_analyses" % api.get_id(context)
@@ -102,28 +107,26 @@ class ManageResultsView(AnalysesView):
         cats = []
         for item in items:
             if "result_type" not in item:
-                logger.info(
-                    "AnalysisRequestOverride::folderitems: result_type not in item"
-                )
+                msg = """AnalysisRequestOverride::folderitems: result_type not
+                         in item"""
+                logger.info(msg)
                 continue
             if item.get("result_type").startswith("timeseries"):
                 newitems.append(item)
                 if self.show_categories:
                     if item["category"] not in cats:
                         cats.append(item["category"])
-        logger.info(
-            "AnalysisRequestOverride::folderitems: found {} items with timeseries items and {} categories".format(
-                len(newitems), len(cats)
-            )
-        )
+        msg = """AnalysisRequestOverride::folderitems: found {} items with
+                 timeseries items and {} categories"""
+        logger.info(msg.format(len(newitems), len(cats)))
         if self.show_categories:
             self.categories = cats
         return newitems
 
 
 def get_timeseries_analyses(sample, short_title=None, skip_invalid=True):
-    """Returns the timeseries analyses assigned to the sample passed in and for the
-    microorganism name specified, if any
+    """Returns the timeseries analyses assigned to the sample passed in and
+    for the microorganism name specified, if any
     """
     analyses = sample.getAnalyses(getPointOfCapture="lab")
     analyses = map(api.get_object, analyses)
