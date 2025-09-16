@@ -6,13 +6,13 @@ from bika.lims import api
 from bika.lims.api.analysisservice import get_by_keyword as get_as_by_keyword
 from bika.lims import bikaMessageFactory as _
 from senaite.core.catalog import SAMPLE_CATALOG
-from senaite.core.exportimport.instruments import IInstrumentAutoImportInterface
-from senaite.core.exportimport.instruments import IInstrumentImportInterface
+from senaite.core.exportimport.instruments import (
+    IInstrumentAutoImportInterface,
+    IInstrumentImportInterface,
+)
 from senaite.core.exportimport.instruments.importer import (
     ALLOWED_ANALYSIS_STATES,
-)
-from senaite.core.exportimport.instruments.importer import ALLOWED_SAMPLE_STATES
-from senaite.core.exportimport.instruments.importer import (
+    ALLOWED_SAMPLE_STATES,
     AnalysisResultsImporter,
 )
 from bika.lims.utils import t
@@ -23,9 +23,14 @@ from zope.interface import implements
 class TimeSeriesParser(InstrumentXLSResultsFileParser):
     """Parser"""
 
-    def __init__(self, infile, worksheet=2, encoding=None, instrument_uid=None):
+    def __init__(
+            self, infile, worksheet=2, encoding=None, instrument_uid=None):
         InstrumentXLSResultsFileParser.__init__(
-            self, infile, worksheet=worksheet, encoding=encoding, data_only=True
+            self,
+            infile,
+            worksheet=worksheet,
+            encoding=encoding,
+            data_only=True
         )
         self._end_header = False
         self._ar_id = None
@@ -261,7 +266,9 @@ class timeseries_import(object):
                 tbex = traceback.format_exc()
                 self.errors.append(tbex)
 
-        results = {"errors": self.errors, "log": self.logs, "warns": self.warns}
+        results = {"errors": self.errors,
+                   "log": self.logs,
+                   "warns": self.warns}
 
         return json.dumps(results)
 

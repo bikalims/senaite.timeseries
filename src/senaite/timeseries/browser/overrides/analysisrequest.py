@@ -107,11 +107,10 @@ class AnalysesView(AV):
             sciformat=int(self.scinot), decimalmark=self.dmk
         )
         item["formatted_result"] = formatted_result
-        logger.info(
-            "AnalysisRequestOverride::_folder_item_result: formatted_result: {}".format(
-                formatted_result
-            )
-        )
+        msg = """AnalysisRequestOverride::_folder_item_result:
+                 formatted_result: {}
+              """
+        logger.info(msg.format(formatted_result))
         if result_type == "timeseries":
             item["time_series_values"] = format_timeseries(obj, result)
             item["time_series_columns"] = obj.TimeSeriesColumns
@@ -139,11 +138,9 @@ class AnalysesView(AV):
                 if self.show_categories:
                     if item["category"] not in cats:
                         cats.append(item["category"])
-        logger.info(
-            "AnalysisRequestOverride::folderitems: found {} items with without timeseries items and {} categories".format(
-                len(newitems), len(cats)
-            )
-        )
+        msg = """AnalysisRequestOverride::folderitems: found {} items with
+                 without timeseries items and {} categories"""
+        logger.info(msg.format(len(newitems), len(cats)))
         if self.show_categories:
             self.categories = cats
         return newitems

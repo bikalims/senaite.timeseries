@@ -44,7 +44,8 @@ class AutoImportResultsView(AIRV):
                 interfaces = mapping.keys()
 
             if not interfaces:
-                # self.log("No active interfaces defined", instrument=instrument)
+                # self.log(
+                # "No active interfaces defined", instrument=instrument)
                 continue
 
             if (
@@ -107,11 +108,13 @@ class AutoImportResultsView(AIRV):
             # self.log("Auto-Import finished")
 
     def list_files(self, folder, ignore="", exclude_before=None):
-        """Returns all files in folder and its subfolders, excluding ignored files and files modified before a given date.
+        """Returns all files in folder and its subfolders, excluding ignored
+           files and files modified before a given date.
 
         :param folder: folder path
         :param ignore: comma-separated list of file names to ignore
-        :param exclude_before: datetime object; exclude files modified before this date
+        :param exclude_before: datetime object; exclude files modified before
+                               this date
         """
         files = []
         ignore_files = ignore.split(",") if ignore else []
