@@ -53,13 +53,18 @@ class TimeSeriesAnalysesViewlet(LabAnalysesViewlet):
 class ManageResultsView(AnalysesView):
     """Listing view for Time Series results entry"""
 
-    contents_table_template = ViewPageTemplateFile("templates/timeseries_results.pt")
+    contents_table_template = ViewPageTemplateFile(
+        "templates/timeseries_results.pt"
+    )
 
     def __init__(self, context, request):
         super(ManageResultsView, self).__init__(context, request)
 
         self.contentFilter.update(
-            {"getPointOfCapture": "lab", "getAncestorsUIDs": [api.get_uid(context)]}
+            {
+                "getPointOfCapture": "lab",
+                "getAncestorsUIDs": [api.get_uid(context)],
+            }
         )
 
         self.form_id = "%s_lab_analyses" % api.get_id(context)

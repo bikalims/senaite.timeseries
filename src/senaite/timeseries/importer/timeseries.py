@@ -8,9 +8,13 @@ from bika.lims import bikaMessageFactory as _
 from senaite.core.catalog import SAMPLE_CATALOG
 from senaite.core.exportimport.instruments import IInstrumentAutoImportInterface
 from senaite.core.exportimport.instruments import IInstrumentImportInterface
-from senaite.core.exportimport.instruments.importer import ALLOWED_ANALYSIS_STATES
+from senaite.core.exportimport.instruments.importer import (
+    ALLOWED_ANALYSIS_STATES,
+)
 from senaite.core.exportimport.instruments.importer import ALLOWED_SAMPLE_STATES
-from senaite.core.exportimport.instruments.importer import AnalysisResultsImporter
+from senaite.core.exportimport.instruments.importer import (
+    AnalysisResultsImporter,
+)
 from bika.lims.utils import t
 from senaite.instruments.instrument import InstrumentXLSResultsFileParser
 from zope.interface import implements
@@ -68,21 +72,29 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
                 return -1
             AS = api.get_object(brains[0])
             if not AS:
-                self.warn("Anaysis Service object for {} not found".format(keyword))
+                self.warn(
+                    "Anaysis Service object for {} not found".format(keyword)
+                )
                 return -1
             try:
                 kw_obj = AS.getKeyword()
             except Exception:
-                self.warn("Anaysis Service object for {} not found".format(kw_obj))
+                self.warn(
+                    "Anaysis Service object for {} not found".format(kw_obj)
+                )
                 return -1
 
             self._analysis_service = AS
             if not hasattr(AS, "TimeSeriesColumns"):
                 self.warn(
-                    "Anaysis Service {} is not Timeseries result type".format(keyword)
+                    "Anaysis Service {} is not Timeseries result type".format(
+                        keyword
+                    )
                 )
                 return -1
-            self._column_headers = [col["ColumnTitle"] for col in AS.TimeSeriesColumns]
+            self._column_headers = [
+                col["ColumnTitle"] for col in AS.TimeSeriesColumns
+            ]
 
         if splitted[0] == "Start Date":
             self._start_date = splitted[1].strip()
@@ -171,7 +183,9 @@ class timeseries_import(object):
         """Import Form"""
         if request is not None:
             infile = request.form["instrument_results_file"]
-            fileformat = request.form.get("instrument_results_file_format", "xlsx")
+            fileformat = request.form.get(
+                "instrument_results_file_format", "xlsx"
+            )
             artoapply = request.form.get("artoapply")
             override = request.form.get("results_override")
             instrument_uid = request.form.get("instrument")
@@ -235,7 +249,10 @@ class timeseries_import(object):
             tbex = ""
             try:
                 importer.process()
-                if not importer._parser._result or len(importer._parser._result) == 0:
+                if (
+                    not importer._parser._result
+                    or len(importer._parser._result) == 0
+                ):
                     self.errors.append("No data found")
                 self.errors.extend(importer.errors)
                 self.logs.extend(importer.logs)
@@ -270,7 +287,6 @@ class timeseries_import(object):
 
 
 class TimeSeriesImporter(AnalysisResultsImporter):
-
     def __init__(
         self,
         parser,

@@ -4,7 +4,9 @@ import datetime
 import os
 from bika.lims import api
 from plone.protect.interfaces import IDisableCSRFProtection
-from senaite.core.exportimport.auto_import_results import AutoImportResultsView as AIRV
+from senaite.core.exportimport.auto_import_results import (
+    AutoImportResultsView as AIRV,
+)
 from zope.interface import alsoProvides
 
 CR = "\n"
@@ -62,7 +64,8 @@ class AutoImportResultsView(AIRV):
                 # check if instrument import folder exists
                 if not os.path.exists(folder):
                     self.log(
-                        "Interface %s: Folder %s does not exist" % (interface, folder),
+                        "Interface %s: Folder %s does not exist"
+                        % (interface, folder),
                         instrument=instrument,
                         interface=interface,
                         level="error",
@@ -90,7 +93,9 @@ class AutoImportResultsView(AIRV):
                         level="info",
                     )
                     # crate auto import log object
-                    logobj = self.create_autoimportlog(instrument, interface, "")
+                    logobj = self.create_autoimportlog(
+                        instrument, interface, ""
+                    )
                     # write import logs
                     self.write_autologs(logobj, self.logs, "info")
                     continue

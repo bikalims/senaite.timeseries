@@ -11,7 +11,6 @@ from senaite.timeseries.utils import format_timeseries
 
 
 class AnalysesView(AV):
-
     def _folder_item_result(self, analysis_brain, item):
         """Set the analysis' result to the item passed in.
 
