@@ -30,14 +30,18 @@ class TimeSeriesValidator:
 
         # Must have one and only one index column
         col_types = [
-            col["ColumnType"] for col in form_values if col["ColumnType"] == "index"
+            col["ColumnType"]
+            for col in form_values
+            if col["ColumnType"] == "index"
         ]
         if len(col_types) == 0 or len(col_types) > 1:
             return _t(_("One and only one index column is required"))
 
         # No more than 1 average column
         col_types = [
-            col["ColumnType"] for col in form_values if col["ColumnType"] == "average"
+            col["ColumnType"]
+            for col in form_values
+            if col["ColumnType"] == "average"
         ]
         if len(col_types) > 1:
             return _t(_("At most one average column is allowed"))
@@ -98,7 +102,9 @@ class TimeSeriesColorValidator:
             col_num = idx + 1
             color = col.get("ColumnColor", "")
             if len(color) > 0 and not is_valid_color_string(color):
-                return _t(_("Column {} has invalid Color {}".format(col_num, color)))
+                return _t(
+                    _("Column {} has invalid Color {}".format(col_num, color))
+                )
         return True
 
 

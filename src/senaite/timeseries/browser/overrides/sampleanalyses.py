@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from senaite.core.browser.viewlets.sampleanalyses import LabAnalysesViewlet as LAV
+from senaite.core.browser.viewlets.sampleanalyses import (
+    LabAnalysesViewlet as LAV,
+)
 from senaite.timeseries.browser.results import get_timeseries_analyses
 
 

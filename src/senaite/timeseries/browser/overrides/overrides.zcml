@@ -40,4 +40,31 @@
           permission="zope.Public"
           />
 
+      <!-- Worksheet Add Analyses View -->
+      <browser:page
+          for="bika.lims.interfaces.IWorksheet"
+          name="add_analyses"
+          class=".worksheet.AddAnalysesView"
+          permission="senaite.core.permissions.EditWorksheet"
+          layer="senaite.timeseries.interfaces.ISenaiteTimeseriesLayer"
+          />
+
+      <!-- Worksheet Template Analyses View-->
+      <browser:page
+          for="*"
+          name="worksheettemplate_services_widget"
+          class=".worksheet.WorksheetTemplateServicesWidget"
+          permission="zope2.View"
+          layer="senaite.timeseries.interfaces.ISenaiteTimeseriesLayer"
+          />
+
+      <!-- Sample Create Worksheet Modal -->
+      <browser:page
+          name="create_worksheet_modal"
+          for="*"
+          class=".modals.CreateWorksheetModal"
+          permission="senaite.core.permissions.EditWorksheet"
+          layer="senaite.core.interfaces.ISenaiteCore"
+          />
+
 </configure>
