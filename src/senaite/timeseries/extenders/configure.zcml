@@ -1,0 +1,24 @@
+<configure xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns="http://namespaces.zope.org/zope"
+           xmlns:monkey="http://namespaces.plone.org/monkey"
+           i18n_domain="senaite.timeseries">
+
+    <include package="archetypes.schemaextender"/>
+    <adapter name='senaite.timeseries.baseabstractanalysis'
+             provides="archetypes.schemaextender.interfaces.ISchemaExtender"
+             factory=".abstractbaseanalysis.BaseAnalysisSchemaExtender"/>
+    <adapter name='senaite.timeseries.baseabstractanalysis.schemamodifier'
+             provides="archetypes.schemaextender.interfaces.ISchemaModifier"
+             factory=".abstractbaseanalysis.BaseAnalysisSchemaModifier" />
+
+    <include package="collective.monkeypatcher" />
+    <monkey:patch description=""
+        class="senaite.core.browser.form.adapters.analysisservice.EditForm"
+        original="toggle_result_type"
+        replacement=".analysisservice.patched_toggle_result_type" />
+    <monkey:patch description=""
+        class="senaite.core.browser.form.adapters.analysisservice.EditForm"
+        original="can_change_keyword"
+        replacement=".analysisservice.patched_can_change_keyword" />
+
+</configure>

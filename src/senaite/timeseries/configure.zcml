@@ -14,6 +14,8 @@
   <!--<includeDependencies package="." />-->
 
   <include package=".browser" />
+  <include package=".extenders" />
+  <include package=".importer" />
 
   <include file="permissions.zcml" />
 
@@ -40,6 +42,6 @@
       name="senaite.timeseries-hiddenprofiles"
       />
 
-  <!-- -*- extra stuff goes here -*- -->
 
+  <include package=".upgrade" />
 </configure>
