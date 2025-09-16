@@ -206,7 +206,8 @@ class timeseries_import(object):
             # Auto improt hack
             parser = self.parser
         else:
-            # Load the most suitable parser according to file extension/options/etc...
+            # Load the most suitable parser according to
+            # file extension/options/etc...
             parser = None
             if not hasattr(infile, "filename"):
                 self.errors.append(_("No file selected"))
@@ -233,7 +234,10 @@ class timeseries_import(object):
             if artoapply == "received":
                 status = ["sample_received"]
             elif artoapply == "received_tobeverified":
-                status = ["sample_received", "attachment_due", "to_be_verified"]
+                status = ["sample_received",
+                          "attachment_due",
+                          "to_be_verified",
+                          ]
 
             over = [False, False]
             if override == "nooverride":
