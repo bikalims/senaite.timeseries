@@ -77,10 +77,17 @@ class WorksheetTemplateServicesWidget(ServicesWidget):
     def folderitems(self):
         items = ServicesWidget.folderitems(self)
         new_items = []
+        cat_remove = None
+        keep = False
         for item in items:
             if item['obj'].getObject().getResultType() == 'timeseries':
+                cat_remove = item['obj'].getObject().getCategoryTitle()
                 continue
+            if item['obj'].getObject().getCategoryTitle() == cat_remove:
+                keep = True
             new_items.append(item)
+        if cat_remove and keep is False:
+            self.categories.pop(self.categories.index(cat_remove))
         return new_items
 
     def folderitem(self, obj, item, index):

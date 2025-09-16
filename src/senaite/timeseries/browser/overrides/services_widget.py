@@ -33,12 +33,7 @@ class ServicesWidget(SW):
             )
         else:
             self.categories.sort()
-        new_items = []
-        for item in items:
-            if item['obj'].getObject().getResultType() == 'timeseries':
-                continue
-            new_items.append(item)
-        return new_items
+        return items
 
     def folderitem(self, obj, item, index):
         """Service triggered each time an item is iterated in folderitems.
