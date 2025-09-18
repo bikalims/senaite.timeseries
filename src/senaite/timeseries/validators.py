@@ -45,6 +45,14 @@ class TimeSeriesValidator:
         ]
         if len(col_types) > 1:
             return _t(_("At most one average column is allowed"))
+
+        # Text columns must be hidden on plot
+        for col in form_values:
+            if col["ColumnDataType"] == "text" and not col.get(
+                "ColumnHide", False
+            ):
+                return _t(_("Text columns must be hidden from plot"))
+
         return True
 
 
