@@ -3,9 +3,10 @@
 
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from bika.lims.interfaces import IBikaLIMS
+from senaite.core.interfaces import ISenaiteCore
 
 
-class ISenaiteTimeseriesLayer(IBikaLIMS):
+class ISenaiteTimeseriesLayer(IBikaLIMS, ISenaiteCore):
     """Zope 3 browser Layer interface specific for senaite.sampleimporter
     This interface is referred in profiles/default/browserlayer.xml.
     All views and viewlets register against this layer will appear in the site
