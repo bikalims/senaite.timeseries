@@ -21,7 +21,8 @@
 from bika.lims import api
 from senaite.timeseries.config import PRODUCT_NAME
 from senaite.timeseries.config import logger
-from senaite.timeseries.setuphandlers import setup_catalogs, add_attachment_to_sample
+from senaite.timeseries.setuphandlers import add_attachment_to_sample
+from senaite.timeseries.setuphandlers import setup_catalogs
 
 from senaite.core.catalog import SAMPLE_CATALOG
 from senaite.core.upgrade import upgradestep
