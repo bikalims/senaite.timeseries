@@ -11,5 +11,13 @@
        handler="senaite.timeseries.upgrade.v01_00_001.upgrade"
        profile="senaite.timeseries:default"/>
 
+    <genericsetup:upgradeStep
+       title="Upgrade to SENAITE TIMESERIES 1.0.2"
+       description="Add ColumnHide"
+       source="1001"
+       destination="1002"
+       handler="senaite.timeseries.upgrade.v01_00_002.upgrade"
+       profile="senaite.timeseries:default"/>
+
 </configure>
 
