@@ -3,6 +3,7 @@
 from Products.CMFPlone.interfaces import INonInstallable
 from zope.interface import implementer
 
+from bika.lims import api
 from senaite.core.catalog import SETUP_CATALOG
 from senaite.core.setuphandlers import setup_other_catalogs
 from senaite.timeseries.config import PROFILE_ID
@@ -48,3 +49,17 @@ def uninstall(context):
 def setup_catalogs(portal):
     """Setup patient catalogs"""
     setup_other_catalogs(portal, indexes=INDEXES, columns=COLUMNS)
+
+
+def add_attachment_to_sample(portal):
+    pt = api.get_tool("portal_types", context=portal)
+    fti = pt.get("AnalysisRequest")
+
+    # add to allowed types
+    allowed_types = fti.allowed_content_types
+    if isinstance(allowed_types, tuple) or isinstance(allowed_types, list):
+        allowed_types = list(allowed_types)
+        if "Attachment" not in allowed_types:
+            allowed_types.append("Attachment")
+            fti.allowed_content_types = tuple(allowed_types)
+            logger.info("Add Attachment on AnalysisRequest allowed types")

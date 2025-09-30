@@ -21,7 +21,7 @@
 from bika.lims import api
 from senaite.timeseries.config import PRODUCT_NAME
 from senaite.timeseries.config import logger
-from senaite.timeseries.setuphandlers import setup_catalogs
+from senaite.timeseries.setuphandlers import setup_catalogs, add_attachment_to_sample
 
 from senaite.core.catalog import SAMPLE_CATALOG
 from senaite.core.upgrade import upgradestep
@@ -38,6 +38,7 @@ def upgrade(tool):
     )
 
     add_columnhide_defaults(tool)
+    add_attachment_to_sample(tool)
 
     logger.info("{0} upgraded to version {1}".format(PRODUCT_NAME, version))
     return True

@@ -64,7 +64,7 @@ def add_graphinterpolation_to_catalog(tool):
 
             if hasattr(obj, "TimeSeriesColumns"):
                 for col in obj.TimeSeriesColumns:
-                    if not col["ColumnColor"]:
+                    if not col.get("ColumnColor"):
                         col["ColumnColor"] = "#000"
 
             logger.info("Reindex Analysis: %r" % obj)
