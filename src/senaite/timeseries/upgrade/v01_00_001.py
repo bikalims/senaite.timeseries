@@ -20,6 +20,7 @@
 
 from bika.lims import api
 from senaite.timeseries.config import PRODUCT_NAME
+from senaite.timeseries.config import PROFILE_ID
 from senaite.timeseries.config import logger
 from senaite.timeseries.setuphandlers import setup_catalogs
 
@@ -31,23 +32,24 @@ version = "1.0.2"
 
 @upgradestep(PRODUCT_NAME, version)
 def upgrade(tool):
-    ver_from = "1001"
+    ver_from = "1000"
 
     portal = api.get_portal()
+    setup = portal.portal_setup
 
     logger.info(
         "Upgrading {0}: {1} -> {2}".format(PRODUCT_NAME, ver_from, version)
     )
 
-    # -------- ADD YOUR STUFF BELOW --------
+    setup.runImportStepFromProfile(PROFILE_ID, "typeinfo")
 
-    add_columnhide_defaults(tool)
+    add_graphinterpolation_to_catalog(tool)
 
     logger.info("{0} upgraded to version {1}".format(PRODUCT_NAME, version))
     return True
 
 
-def add_columnhide_defaults(tool):
+def add_graphinterpolation_to_catalog(tool):
     logger.info("Reindexing timeseries AnalysisService ...")
     setup_catalogs(api.get_portal())
     cat = api.get_tool(SAMPLE_CATALOG)
@@ -56,9 +58,14 @@ def add_columnhide_defaults(tool):
         analyses = sample.getAnalyses()
         for analysis in analyses:
             obj = analysis.getObject()
+            if not hasattr(obj, "GraphInterpolation"):
+                if not obj.GraphInterpolation:
+                    obj.GraphInterpolation = "curveLinear"
+
             if hasattr(obj, "TimeSeriesColumns"):
                 for col in obj.TimeSeriesColumns:
-                    col["ColumnHide"] = False
+                    if not col["ColumnColor"]:
+                        col["ColumnColor"] = "#000"
 
             logger.info("Reindex Analysis: %r" % obj)
             obj.reindexObject()
