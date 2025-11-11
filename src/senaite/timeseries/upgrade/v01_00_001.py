@@ -59,7 +59,9 @@ def add_graphinterpolation_to_catalog(tool):
         for analysis in analyses:
             obj = analysis.getObject()
             if not hasattr(obj, "GraphInterpolation"):
-                if not obj.GraphInterpolation:
+                graph_interpolation = \
+                    obj.Schema()['GraphInterpolation'].getAccessor(obj)()
+                if not graph_interpolation:
                     obj.GraphInterpolation = "curveLinear"
 
             if hasattr(obj, "TimeSeriesColumns"):

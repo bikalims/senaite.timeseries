@@ -163,6 +163,7 @@ class FieldAnalysesTable(AnalysesView):
         self.show_select_column = True
         self.show_search = False
         self.expand_all_categories = False
+        self.show_column_toggles = True
         self.reorder_analysis_columns()
 
 
@@ -183,4 +184,5 @@ class LabAnalysesTable(AnalysesView):
         self.show_select_column = True
         self.show_search = False
         self.expand_all_categories = False
+        self.show_column_toggles = True
         self.reorder_analysis_columns()
