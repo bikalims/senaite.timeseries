@@ -29,22 +29,46 @@ class TimeSeriesValidator:
         form_values = form.get(fieldname, False)
 
         # Must have one and only one index column
-        col_types = [
+        index_col_types = [
             col["ColumnType"]
             for col in form_values
             if col["ColumnType"] == "index"
         ]
-        if len(col_types) == 0 or len(col_types) > 1:
+        if len(index_col_types) == 0 or len(index_col_types) > 1:
             return _t(_("One and only one index column is required"))
 
         # No more than 1 average column
-        col_types = [
+        ave_col_types = [
             col["ColumnType"]
             for col in form_values
             if col["ColumnType"] == "average"
         ]
-        if len(col_types) > 1:
-            return _t(_("At most one average column is allowed"))
+        if len(ave_col_types) > 1:
+            return _t(_("At most one Average column is allowed"))
+
+        # Text columns must be hidden on plot
+        for col in form_values:
+            if col["ColumnDataType"] == "text" and not col.get(
+                "ColumnHide", False
+            ):
+                return _t(_("Text columns must be hidden from plot"))
+
+        # Error bar col must have an ave col
+        error_col_types = [
+            col["ColumnType"]
+            for col in form_values
+            if col["ColumnType"] == "errorbar"
+        ]
+        if len(error_col_types) > 1:
+            return _t(_("Only one Error Bar column allowed"))
+
+        if len(error_col_types) == 1 and len(ave_col_types) == 0:
+            return _t(
+                _(
+                    "If Error Bar column specified then an Average column in required"
+                )
+            )
+
         return True
 
 

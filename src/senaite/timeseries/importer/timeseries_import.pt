@@ -7,7 +7,7 @@
     <tr>
         <td><label for="worksheet">Worksheet Number (the first being zero)</label>&nbsp;</td>
         <td>
-          <input name="worksheet" type="number"/>
+          <input name="worksheet" type="number" value="2"/>
         </td>
     </tr>
     <tr>
@@ -15,7 +15,7 @@
         <td>
             <select name="artoapply" id="artoapply">
                 <option value="received">Received</option>
-                <option value="received_tobeverified">Received and to be verified</option>
+                <option value="received_tobeverified" selected >Received and to be verified</option>
             </select>
         </td>
     </tr>
@@ -25,7 +25,7 @@
             <select name="results_override" id="results_override">
                 <option value="nooverride">Don't override results</option>
                 <option value="override">Override non-empty results</option>
-                <option value="overrideempty">Override non-empty results (also with empty)</option>
+                <option value="overrideempty" selected >Override non-empty results (also with empty)</option>
             </select>
         </td>
     </tr>

@@ -2,9 +2,17 @@ import json
 
 
 def format_timeseries(obj, results):
-    min_range = float(obj.ResultsRange.get("min", "-1000000"))
-    max_range = float(obj.ResultsRange.get("max", "1000000"))
-    values = json.loads(results)
+    def safe_float(value, default):
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return default
+    min_range = safe_float(obj.ResultsRange.get("min"), -1000000)
+    max_range = safe_float(obj.ResultsRange.get("max"), 1000000)
+
+    values = []
+    if results:
+        values = json.loads(results)
     new_results = []
     for row in values:
         new_row = []

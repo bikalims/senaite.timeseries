@@ -29,7 +29,10 @@ graph_interpolation = ExtStringField(
     default="curveBasis",
     vocabulary=DisplayList(INTERPOLCATIONS),
     accessor="getGraphInterpolation",
-    widget=SelectionWidget(label=_("Interpolation"), format="select",),
+    widget=SelectionWidget(
+        label=_("Interpolation"),
+        format="select",
+    ),
 )
 
 
@@ -68,24 +71,34 @@ time_series_columns_field = ExtRecordsField(
         "timeseriesvalidator",
         "timeseriestitlevalidator",
         "timeseriescolorvalidator",
+        "timeserieshidevalidator",
     ),
-    subfields=("ColumnType", "ColumnTitle", "ColumnDataType", "ColumnColor",),
+    subfields=(
+        "ColumnType",
+        "ColumnTitle",
+        "ColumnDataType",
+        "ColumnColor",
+        "ColumnHide",
+    ),
     subfield_labels={
         "ColumnType": _("Column Type"),
         "ColumnTitle": _("Column Title"),
         "ColumnDataType": _("Column Data Type"),
         "ColumnColor": _("Column Color"),
+        "ColumnHide": _("Hide on plot"),
     },
     subfield_validators={
         "ColumnType": "timeseriesvalidator",
         "ColumnTitle": "timeseriestitlevalidator",
         "ColumnColor": "timeseriescolorvalidator",
+        "ColumnHide": "timeserieshidevalidator",
     },
     subfield_types={
         "ColumnType": "string",
         "ColumnTitle": "string",
         "ColumnDataType": "string",
         "ColumnColor": "string",
+        "ColumnHide": "boolean",
     },
     subfield_sizes={
         "ColumnType": 1,
@@ -98,6 +111,7 @@ time_series_columns_field = ExtRecordsField(
         "ColumnTitle": 25,
         "ColumnDataType": 1,
         "ColumnColor": 8,
+        "ColumnHide": 4,
     },
     subfield_vocabularies={
         "ColumnType": DisplayList(
@@ -105,6 +119,7 @@ time_series_columns_field = ExtRecordsField(
                 ("", ""),
                 ("index", _("Index")),
                 ("data", _("Data")),
+                ("errorbar", _("Error Bar")),
                 ("average", _("Average")),
             )
         ),
@@ -113,6 +128,7 @@ time_series_columns_field = ExtRecordsField(
                 ("", ""),
                 ("float", _("Float")),
                 ("number", _("Number")),
+                ("text", _("Text")),
                 # ("date", _("Date")),
             )
         ),

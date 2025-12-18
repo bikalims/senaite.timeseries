@@ -3,6 +3,7 @@ import traceback
 from os.path import abspath
 
 from bika.lims import api
+from bika.lims import logger
 from bika.lims.api.analysisservice import get_by_keyword as get_as_by_keyword
 from bika.lims import bikaMessageFactory as _
 from senaite.core.catalog import SAMPLE_CATALOG
@@ -24,13 +25,14 @@ class TimeSeriesParser(InstrumentXLSResultsFileParser):
     """Parser"""
 
     def __init__(
-            self, infile, worksheet=2, encoding=None, instrument_uid=None):
+        self, infile, worksheet=2, encoding=None, instrument_uid=None
+    ):
         InstrumentXLSResultsFileParser.__init__(
             self,
             infile,
             worksheet=worksheet,
             encoding=encoding,
-            data_only=True
+            data_only=True,
         )
         self._end_header = False
         self._ar_id = None
@@ -234,10 +236,11 @@ class timeseries_import(object):
             if artoapply == "received":
                 status = ["sample_received"]
             elif artoapply == "received_tobeverified":
-                status = ["sample_received",
-                          "attachment_due",
-                          "to_be_verified",
-                          ]
+                status = [
+                    "sample_received",
+                    "attachment_due",
+                    "to_be_verified",
+                ]
 
             over = [False, False]
             if override == "nooverride":
@@ -270,9 +273,11 @@ class timeseries_import(object):
                 tbex = traceback.format_exc()
                 self.errors.append(tbex)
 
-        results = {"errors": self.errors,
-                   "log": self.logs,
-                   "warns": self.warns}
+        results = {
+            "errors": self.errors,
+            "log": self.logs,
+            "warns": self.warns,
+        }
 
         return json.dumps(results)
 
@@ -330,3 +335,109 @@ class TimeSeriesImporter(AnalysisResultsImporter):
             return {}
 
         return self.parser.getRawResults()
+
+    def process(self):
+        AnalysisResultsImporter.process(self)
+        success_logs = [
+            log for log in self._logs if "imported sucessfully" in log
+        ]
+        if len(success_logs) != 1:
+            logger.info("Attachment process: no success logs found")
+            return
+        success_log = success_logs[0].split(":")
+        if len(success_log) != 2:
+            logger.info("Attachment process: success logs format unknown")
+            return
+        sample_title = success_log[0]
+        analysis = self.get_analyses_for(sample_title)
+        if len(analysis) != 1:
+            logger.info("Attachment process: Analysis not found")
+            return
+        sample = analysis[0].aq_parent
+        infile = self.parser.getInputFile()
+        attachment = self.create_attachment_for_sample(sample, infile)
+        self.attach_attachment_to_sample(sample, attachment)
+
+    def create_attachment_for_sample(self, sample, infile):
+        """Create a new attachment in the attachment
+
+        :param sample: Sample
+        :param infile: upload file wrapper
+        :returns: Attachment object
+        """
+        if not infile:
+            return None
+
+        att_type = self.create_mime_attachmenttype()
+        filename = infile.filename
+
+        attachment = api.create(sample, "Attachment")
+        attachment.edit(
+            title=filename,
+            AttachmentFile=infile,
+            AttachmentType=api.get_uid(att_type),
+            AttachmentKeys="Results, Automatic import",
+            RenderInReport=False,
+        )
+        attachment.reindexObject()
+
+        logger.info(
+            _(
+                "Attached file '{filename}' to sample {sample}".format(
+                    filename=api.safe_unicode(filename), sample=sample.id
+                )
+            )
+        )
+
+        return attachment
+
+    def attach_attachment_to_sample(self, sample, attachment):
+        """Attach a file or a given set of files to an sample
+
+        :param sample: sample where the files are to be attached
+        :param attachment: files to be attached. This can be either a
+        single file or a list of files
+        :return: None
+        """
+        if not attachment:
+            return
+        if isinstance(attachment, list):
+            for attach in attachment:
+                self.attach_attachment(sample, attach)
+            return
+
+        # current attachments
+        attachments = sample.getAttachment()
+        current_filename = attachment.getAttachmentFile().filename
+        for att in attachments:
+            if current_filename == att.getAttachmentFile().filename:
+                attachments.remove(att)
+                sample.setAttachment(attachments)
+                sample.manage_delObjects(
+                    [
+                        att.getId(),
+                    ]
+                )
+                self.log(
+                    _(
+                        "Attachment '{attachment}' was already linked "
+                        "to sample {sample}. It will be replaced".format(
+                            attachment=api.safe_unicode(current_filename),
+                            sample=sample.id,
+                        )
+                    )
+                )
+                break
+
+        # Add new attachment
+        self.log(
+            _(
+                "Attaching '{attachment}' to Sample '{sample}'".format(
+                    attachment=api.safe_unicode(current_filename),
+                    sample=sample.id,
+                )
+            )
+        )
+        attachments.append(attachment)
+        sample.setAttachment([att.UID() for att in attachments])
+        sample.reindexObject()
