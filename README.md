@@ -20,16 +20,14 @@ It is particularly useful for:
 
 - Capture multiple results for the same analysis at different time intervals
 - Beautiful tabular and graphical (chart) presentation of time-series data
-- Configurable time points per analysis or sample type
 - Trend visualisation directly in the LIMS interface
-- Export of time-series data and charts
-- Full integration with Senaite workflows, calculations, and reporting
+- Time-series data and charts on COAs
+- Full integration with Bika/Senaite workflows, calculations, and reporting
 - Audit trail and ISO-compliant data integrity
 
 ### Requirements
 
 - **Senaite** (latest recommended) or **Ingwe Bika LIMS 4**
-- Python 3 + Plone 6 environment
 
 ### Installation
 
@@ -50,18 +48,14 @@ eggs =
 ##### For Docker
 
 ### Documentation
-Full documentation and configuration guides are available at:
-https://www.bikalims.org
+[Time Series in the Bika User Manual](https://www.bikalims.org/new-manual/analysis-services/time-series-analyses)
 
 ### License
 This project is licensed under the GNU General Public License v2.0 (GPL-2.0).
-See LICENSE.GPL for details.
 
 ### Support & Professional Services
-Bika Lab Systems provides professional implementation, training, custom development, and ongoing support for senaite.timeseries and the full Ingwe Bika LIMS suite.
+[Bika Lab Systems](www.bikalabs.com) provides professional implementation, training, custom development, and ongoing support for senaite.timeseries and the full Ingwe Bika LIMS suite.
 
-Website: https://www.bikalims.org
-Based in Cape Town, South Africa
-
+Website: [https://www.bikalims.org](https://www.bikalims.org)
 
 Made with ❤️ in Cape Town, South Africa
