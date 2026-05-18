@@ -44,6 +44,16 @@ cfg
 eggs =
     ...
     senaite.timeseries
+### Usage
+
+#### Configure the Timeseries Filename
+
+The exported/generated timeseries filename can be configured using the Sample ID and the Analysis name.
+
+By default:
+
+- **Sample ID** is used as the primary identifier
+- **Analysis Name** is used as the filename/title component
 
 ##### For Docker
 
