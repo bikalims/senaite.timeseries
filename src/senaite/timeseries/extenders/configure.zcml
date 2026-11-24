@@ -15,6 +15,7 @@
     <monkey:patch description=""
         class="senaite.core.browser.form.adapters.analysisservice.EditForm"
         original="toggle_result_type"
+        preserveOriginal="true"
         replacement=".analysisservice.patched_toggle_result_type" />
     <monkey:patch description=""
         class="senaite.core.browser.form.adapters.analysisservice.EditForm"
