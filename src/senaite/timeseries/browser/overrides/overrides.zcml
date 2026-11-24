@@ -42,7 +42,7 @@
 
       <!-- Worksheet Add Analyses View -->
       <browser:page
-          for="bika.lims.interfaces.IWorksheet"
+          for="senaite.core.interfaces.IWorksheet"
           name="add_analyses"
           class=".worksheet.AddAnalysesView"
           permission="senaite.core.permissions.EditWorksheet"

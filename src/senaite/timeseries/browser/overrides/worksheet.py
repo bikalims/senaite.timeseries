@@ -5,12 +5,29 @@ import collections
 from bika.lims import api
 from bika.lims import senaiteMessageFactory as _
 from bika.lims.utils import get_link_for
+from senaite.core.content.worksheettemplate import IWorksheetTemplateSchema
 from senaite.core.interfaces import IWorksheetTemplate
 from .services_widget import ServicesWidget
 
 from bika.lims.browser.worksheet.views.add_analyses import (
     AddAnalysesView as AAV
 )
+
+
+def get_restrict_to_method_uid(context):
+    """Return the selected worksheet template method UID.
+    """
+    if not IWorksheetTemplate.providedBy(context):
+        return None
+
+    field = IWorksheetTemplateSchema["restrict_to_method"]
+    if field:
+        return field.get_raw(context)
+
+    if hasattr(context, "getRawRestrictToMethod"):
+        return context.getRawRestrictToMethod()
+
+    return None
 
 
 class AddAnalysesView(AAV):
@@ -31,10 +48,7 @@ class WorksheetTemplateServicesWidget(ServicesWidget):
     def update(self):
         super(WorksheetTemplateServicesWidget, self).update()
 
-        method_uid = None
-        if IWorksheetTemplate.providedBy(self.context):
-            method_uid = self.context.getRawRestrictToMethod()
-
+        method_uid = get_restrict_to_method_uid(self.context)
         if method_uid:
             self.contentFilter.update({
                 "method_available_uid": method_uid
